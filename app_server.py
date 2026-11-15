@@ -27,7 +27,7 @@ sys.path.insert(0, BASE_DIR)
 from src.agent_coordinator import HungPhatMasterAgent
 
 PORT = 8088
-WEB_DIR = os.path.join(BASE_DIR, "web")
+WEB_DIR = os.path.join(BASE_DIR, "public") if os.path.exists(os.path.join(BASE_DIR, "public")) else os.path.join(BASE_DIR, "web")
 
 # Môi trường lưu trữ: Nếu chạy trên Vercel hoặc Cloud Serverless (Read-only filesystem), sử dụng /tmp
 IS_VERCEL = (os.environ.get('VERCEL') == '1' or os.environ.get('AWS_LAMBDA_FUNCTION_NAME') is not None)
