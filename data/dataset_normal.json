@@ -1,0 +1,256 @@
+{
+  "project_meta": {
+    "project_name": "Đề án Mở rộng Thị trường WMS Chuỗi Bán lẻ 2026",
+    "company": "Công ty Cổ phần Giải pháp Kho thông minh Hưng Phát",
+    "evaluation_date": "2026-03-15",
+    "target_expansion_slots": 2,
+    "total_candidate_locations": 4
+  },
+  "solution_catalog": {
+    "supported_features": [
+      "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+      "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)",
+      "Tích hợp máy quét mã vạch Barcode/QR cầm tay",
+      "Kết nối đồng bộ với phần mềm POS/ERP bán lẻ vừa và nhỏ",
+      "Cảnh báo tồn kho an toàn và tối ưu hóa diện tích kho"
+    ],
+    "unsupported_features": [
+      "Điều khiển tự động hóa robot AGV kho thông minh chuyên sâu",
+      "Quản lý kho lạnh âm sâu chuyên biệt dược phẩm/hóa chất"
+    ],
+    "standard_sla_support": "Hỗ trợ kỹ thuật từ xa (Hotline/Remote) 24/7; Hỗ trợ tại chỗ (On-site) từ 8h00 - 18h00 các ngày trong tuần trong bán kính 100km từ văn phòng/trạm kỹ thuật."
+  },
+  "deployment_capacity": {
+    "available_deployment_teams": 1,
+    "max_concurrent_locations": 2,
+    "regional_support_hubs": {
+      "LOC_A": {
+        "location_name": "Địa bàn A (Hà Nội & Vùng phụ cận)",
+        "hub_status": "Đã có văn phòng và trạm kỹ thuật",
+        "onsite_response_time_hours": 2,
+        "max_onsite_sla": "Hỗ trợ on-site 24/7 và xử lý trong 2-4 giờ"
+      },
+      "LOC_B": {
+        "location_name": "Địa bàn B (Đà Nẵng & Miền Trung)",
+        "hub_status": "Có đối tác ủy quyền kỹ thuật",
+        "onsite_response_time_hours": 4,
+        "max_onsite_sla": "Hỗ trợ on-site trong vòng 4-6 giờ giờ hành chính, remote 24/7"
+      },
+      "LOC_C": {
+        "location_name": "Địa bàn C (TP.HCM & Vùng lân cận)",
+        "hub_status": "Đã có chi nhánh hỗ trợ kỹ thuật",
+        "onsite_response_time_hours": 2,
+        "max_onsite_sla": "Hỗ trợ on-site trong vòng 2 giờ, remote 24/7"
+      },
+      "LOC_D": {
+        "location_name": "Địa bàn D (Cần Thơ & Đồng bằng Sông Cửu Long)",
+        "hub_status": "Chưa có trạm kỹ thuật hoặc đối tác",
+        "onsite_response_time_hours": 24,
+        "max_onsite_sla": "Chỉ có thể hỗ trợ online từ xa, hỗ trợ tại chỗ cần 24-48 giờ di chuyển"
+      }
+    }
+  },
+  "selection_criteria": [
+    {
+      "criteria_id": "CRIT_01",
+      "name": "Quy mô và Tốc độ tăng trưởng thị trường",
+      "weight": 0.25,
+      "description": "Đánh giá số lượng chuỗi cửa hàng bán lẻ và tốc độ mở mới hàng năm"
+    },
+    {
+      "criteria_id": "CRIT_02",
+      "name": "Mức độ phù hợp sản phẩm (Product-Market Fit)",
+      "weight": 0.30,
+      "description": "Tỷ lệ nhu cầu tính năng của khách hàng khớp với năng lực giải pháp hiện có của Hưng Phát"
+    },
+    {
+      "criteria_id": "CRIT_03",
+      "name": "Môi trường cạnh tranh và Dư địa thị phần",
+      "weight": 0.20,
+      "description": "Đánh giá mức độ độc quyền của đối thủ; ưu tiên địa bàn chưa bị chiếm lĩnh bởi giải pháp lớn"
+    },
+    {
+      "criteria_id": "CRIT_04",
+      "name": "Khả năng triển khai và Hỗ trợ tại chỗ",
+      "weight": 0.25,
+      "description": "Đánh giá mức độ đáp ứng yêu cầu hỗ trợ tại chỗ của khách hàng theo năng lực SLA hiện tại",
+      "is_hard_constraint": true
+    }
+  ],
+  "market_documents": [
+    {
+      "doc_id": "MKT-A-01",
+      "location_id": "LOC_A",
+      "title": "Báo cáo Toàn cảnh Bán lẻ Vùng Kinh tế Trọng điểm Bắc Bộ 2025",
+      "source": "Viện Nghiên cứu Thị trường Bán lẻ Việt Nam",
+      "timestamp": "2025-11-20",
+      "retail_stores_count": 4200,
+      "annual_growth_rate_pct": 14.5,
+      "market_size_vnd_bil": 1850,
+      "duplicate_flag": false,
+      "key_findings": "Tập trung nhiều chuỗi siêu thị tiện lợi và chuỗi thời trang bán lẻ vừa và nhỏ, đang chuyển đổi số kho hàng."
+    },
+    {
+      "doc_id": "MKT-A-02",
+      "location_id": "LOC_A",
+      "title": "Trích yếu Niên giám Thống kê Bán lẻ Hà Nội",
+      "source": "Tạp chí Bán lẻ Hiện đại (Dẫn lại số liệu Viện Nghiên cứu 2021)",
+      "timestamp": "2024-03-10",
+      "retail_stores_count": 3100,
+      "annual_growth_rate_pct": 11.2,
+      "market_size_vnd_bil": 1300,
+      "duplicate_flag": true,
+      "duplicate_of_source": "Viện Nghiên cứu Thị trường Bán lẻ Việt Nam (Kỳ thống kê cũ 2021)",
+      "key_findings": "Số liệu cũ dẫn lại từ kỳ thống kê 2021, không phản ánh làn sóng bùng nổ kho vệ tinh sau 2023."
+    },
+    {
+      "doc_id": "MKT-B-01",
+      "location_id": "LOC_B",
+      "title": "Báo cáo Thị trường Logistics & Kho Vận Bán lẻ Đà Nẵng - Miền Trung",
+      "source": "Sở Công Thương & Hiệp hội Logistics Miền Trung",
+      "timestamp": "2025-10-15",
+      "retail_stores_count": 1850,
+      "annual_growth_rate_pct": 18.2,
+      "market_size_vnd_bil": 920,
+      "duplicate_flag": false,
+      "key_findings": "Quy mô số lượng chuỗi nhỏ hơn hai đầu đất nước nhưng tốc độ tăng trưởng cao nhất (18.2%). Nhu cầu quản lý kho tổng phân phối đang cấp bách."
+    },
+    {
+      "doc_id": "MKT-C-01",
+      "location_id": "LOC_C",
+      "title": "Khảo sát Ngành Bán lẻ và E-commerce Logistics TP.HCM & Đông Nam Bộ",
+      "source": "Tổ chức Nghiên cứu Thị trường RetailPulse",
+      "timestamp": "2025-08-30",
+      "retail_stores_count": 6800,
+      "annual_growth_rate_pct": 16.0,
+      "market_size_vnd_bil": 3200,
+      "duplicate_flag": false,
+      "key_findings": "Quy mô thị trường lớn nhất cả nước, tập trung các tập đoàn bán lẻ đa quốc gia và chuỗi siêu thị quy mô lớn."
+    },
+    {
+      "doc_id": "MKT-D-01",
+      "location_id": "LOC_D",
+      "title": "Báo cáo Phát triển Hạ tầng Thương mại Cần Thơ & ĐBSCL",
+      "source": "Cục Quản lý Thị trường & Xúc tiến Thương mại ĐBSCL",
+      "timestamp": "2025-06-12",
+      "retail_stores_count": 1200,
+      "annual_growth_rate_pct": 8.5,
+      "market_size_vnd_bil": 450,
+      "duplicate_flag": false,
+      "key_findings": "Thị trường mới nổi, các chuỗi bán lẻ đang ở mức sơ khai, đa phần dùng sổ sách hoặc Excel kết hợp phần mềm tính tiền cơ bản."
+    }
+  ],
+  "competitor_profiles": [
+    {
+      "location_id": "LOC_A",
+      "competitors": [
+        {
+          "name": "Công ty TNHH Phần mềm Kho Vận Alpha",
+          "market_share_pct": 28.0,
+          "target_segment": "Doanh nghiệp sản xuất lớn",
+          "strengths": "Hệ thống tùy biến sâu, quan hệ lâu năm",
+          "weaknesses": "Giá thành cao, triển khai mất 6-9 tháng, không phù hợp chuỗi bán lẻ vừa và nhỏ"
+        },
+        {
+          "name": "Giải pháp WMS Cloud Beta",
+          "market_share_pct": 15.0,
+          "target_segment": "Shop bán lẻ cá nhân",
+          "strengths": "Giá rẻ, cài đặt nhanh",
+          "weaknesses": "Không có tính năng quản lý vị trí kho thông minh, thiếu kiểm soát date/hạn dùng"
+        }
+      ],
+      "competitive_landscape_summary": "Dư địa rất lớn trong phân khúc chuỗi bán lẻ quy mô vừa (10 - 50 điểm bán) - đúng phân khúc mục tiêu của Hưng Phát."
+    },
+    {
+      "location_id": "LOC_B",
+      "competitors": [
+        {
+          "name": "Các phần mềm tự chế hoặc đại lý cấp 2 từ TP.HCM",
+          "market_share_pct": 18.0,
+          "target_segment": "Kho hàng lẻ",
+          "strengths": "Có mặt tại địa phương",
+          "weaknesses": "Chất lượng dịch vụ kém, hỗ trợ kỹ thuật chậm chạp, không có sản phẩm chuyên sâu cho chuỗi"
+        }
+      ],
+      "competitive_landscape_summary": "Chưa có đối thủ thống lĩnh thị phần; thị trường còn phân mảnh, rất thuận lợi để Hưng Phát thâm nhập và chiếm lĩnh thị phần."
+    },
+    {
+      "location_id": "LOC_C",
+      "competitors": [
+        {
+          "name": "Tập đoàn Công nghệ MegaWMS Toàn Cầu & Nexus Soft",
+          "market_share_pct": 65.0,
+          "target_segment": "Chuỗi bán lẻ đa kênh quy mô lớn và tập đoàn",
+          "strengths": "Thương hiệu quốc tế mạnh, tích hợp hệ thống robot tự động hóa AGV hoàn chỉnh, ngân sách marketing khổng lồ",
+          "weaknesses": "Chi phí bản quyền đắt đỏ"
+        }
+      ],
+      "competitive_landscape_summary": "Thị trường cạnh tranh khốc liệt; 65% thị phần nằm trong tay các ông lớn; chi phí thâu tóm khách hàng (CAC) tại đây cực kỳ cao."
+    },
+    {
+      "location_id": "LOC_D",
+      "competitors": [
+        {
+          "name": "Phần mềm kế toán kiêm kho nội địa Miền Tây",
+          "market_share_pct": 40.0,
+          "target_segment": "Cửa hàng gia đình",
+          "strengths": "Quan hệ địa phương chặt chẽ, giá rất rẻ",
+          "weaknesses": "Không phải phần mềm WMS chuyên nghiệp"
+        }
+      ],
+      "competitive_landscape_summary": "Cạnh tranh bằng giá rẻ và quan hệ quen biết; thói quen chi trả cho giải pháp công nghệ chuyên sâu còn rất thấp."
+    }
+  ],
+  "customer_feedback": [
+    {
+      "location_id": "LOC_A",
+      "sample_size": 45,
+      "demanded_features": [
+        "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+        "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)",
+        "Tích hợp máy quét mã vạch Barcode/QR cầm tay",
+        "Kết nối đồng bộ với phần mềm POS/ERP bán lẻ vừa và nhỏ"
+      ],
+      "onsite_support_demanded": "Cần hỗ trợ tại chỗ khi onboarding và xử lý sự cố trong giờ hành chính (2-4 giờ phản hồi).",
+      "onsite_support_strictness": "Standard",
+      "feedback_notes": "85% khách hàng khảo sát phản hồi giải pháp của Hưng Phát đáp ứng chuẩn xác bài toán quản lý kho của họ."
+    },
+    {
+      "location_id": "LOC_B",
+      "sample_size": 32,
+      "demanded_features": [
+        "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+        "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)",
+        "Tích hợp máy quét mã vạch Barcode/QR cầm tay",
+        "Cảnh báo tồn kho an toàn và tối ưu hóa diện tích kho"
+      ],
+      "onsite_support_demanded": "Sẵn sàng nhận hỗ trợ kỹ thuật từ xa (Hotline/Teamviewer) 24/7; chỉ cần có đối tác kỹ thuật tại Đà Nẵng hỗ trợ trực tiếp khi triển khai ban đầu.",
+      "onsite_support_strictness": "Flexible",
+      "feedback_notes": "Khách hàng rất cởi mở với mô hình hỗ trợ kết hợp Remote + Đối tác kỹ thuật địa phương."
+    },
+    {
+      "location_id": "LOC_C",
+      "sample_size": 60,
+      "demanded_features": [
+        "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+        "Điều khiển tự động hóa robot AGV kho thông minh chuyên sâu",
+        "Tích hợp hệ thống phân loại băng chuyền tốc độ cao",
+        "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)"
+      ],
+      "onsite_support_demanded": "Yêu cầu có kỹ sư trực tại kho 24/7 trong 3 tháng đầu triển khai.",
+      "onsite_support_strictness": "Strict_24_7",
+      "feedback_notes": "60% nhu cầu tập trung vào tự động hóa robot băng chuyền (tính năng Hưng Phát chưa có); yêu cầu hỗ trợ trực 24/7 tại kho gây tốn kém nhân sự."
+    },
+    {
+      "location_id": "LOC_D",
+      "sample_size": 25,
+      "demanded_features": [
+        "Kết nối đồng bộ với phần mềm POS/ERP bán lẻ vừa và nhỏ",
+        "Quản lý tồn kho cơ bản giá rẻ"
+      ],
+      "onsite_support_demanded": "Yêu cầu kỹ sư phải đến trực tiếp tận nơi trong vòng 1-2 giờ mỗi khi có lỗi phần cứng hoặc mạng kho.",
+      "onsite_support_strictness": "Ultra_Strict_Immediate",
+      "feedback_notes": "Khách hàng thiếu nhân sự IT nội bộ nên phụ thuộc hoàn toàn vào hỗ trợ tại chỗ, trong khi Hưng Phát chưa có trạm hỗ trợ tại ĐBSCL."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# Hưng Phát Smart Warehouse - Master AI Agent
+# Hệ thống sử dụng 100% Python Standard Library (Thư viện chuẩn có sẵn trong Python 3.8+)
+# Không yêu cầu cài đặt thêm bất kỳ thư viện bên thứ 3 nào qua pip!
+# 
+# Yêu cầu hệ thống:
+# Python >= 3.8

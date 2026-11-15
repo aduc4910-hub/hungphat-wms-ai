@@ -1,0 +1,219 @@
+{
+  "project_meta": {
+    "project_name": "Đề án Mở rộng Thị trường WMS Chuỗi Bán lẻ 2026 (Kiểm thử: Ranh Giới Quy Tắc - Boundary Case)",
+    "company": "Công ty Cổ phần Giải pháp Kho thông minh Hưng Phát",
+    "evaluation_date": "2026-03-15",
+    "target_expansion_slots": 2,
+    "total_candidate_locations": 4
+  },
+  "solution_catalog": {
+    "supported_features": [
+      "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+      "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)",
+      "Tích hợp máy quét mã vạch Barcode/QR cầm tay",
+      "Kết nối đồng bộ với phần mềm POS/ERP bán lẻ vừa và nhỏ",
+      "Cảnh báo tồn kho an toàn và tối ưu hóa diện tích kho"
+    ],
+    "unsupported_features": [
+      "Điều khiển tự động hóa robot AGV kho thông minh chuyên sâu",
+      "Quản lý kho lạnh âm sâu chuyên biệt dược phẩm/hóa chất"
+    ],
+    "standard_sla_support": "Hỗ trợ kỹ thuật từ xa (Hotline/Remote) 24/7; Hỗ trợ tại chỗ (On-site) từ 8h00 - 18h00 các ngày trong tuần trong bán kính 100km từ văn phòng/trạm kỹ thuật."
+  },
+  "deployment_capacity": {
+    "available_deployment_teams": 1,
+    "max_concurrent_locations": 2,
+    "regional_support_hubs": {
+      "LOC_A": {
+        "location_name": "Địa bàn A (Thủ đô Hà Nội)",
+        "hub_status": "Đã có văn phòng và trạm kỹ thuật",
+        "onsite_response_time_hours": 2,
+        "max_onsite_sla": "Hỗ trợ on-site 2-4 giờ giờ hành chính, remote 24/7"
+      },
+      "LOC_B": {
+        "location_name": "Địa bàn B (Đà Nẵng & Duyên Hải)",
+        "hub_status": "Có đối tác ủy quyền kỹ thuật",
+        "onsite_response_time_hours": 4,
+        "max_onsite_sla": "Hỗ trợ on-site trong vòng 4-6 giờ giờ hành chính, remote 24/7"
+      },
+      "LOC_MEGA": {
+        "location_name": "Địa bàn MEGA (Đại đô thị Phía Nam)",
+        "hub_status": "Chưa có trạm kỹ thuật tại chỗ (chỉ có văn phòng kinh doanh)",
+        "onsite_response_time_hours": 12,
+        "max_onsite_sla": "Hỗ trợ kỹ thuật từ xa qua mạng, không có đội kỹ sư trực đêm"
+      },
+      "LOC_D": {
+        "location_name": "Địa bàn D (Vùng Tây Nam)",
+        "hub_status": "Chưa có trạm kỹ thuật",
+        "onsite_response_time_hours": 24,
+        "max_onsite_sla": "Chỉ có thể hỗ trợ online từ xa"
+      }
+    }
+  },
+  "selection_criteria": [
+    {
+      "criteria_id": "CRIT_01",
+      "name": "Quy mô và Tốc độ tăng trưởng thị trường",
+      "weight": 0.25,
+      "description": "Đánh giá số lượng chuỗi cửa hàng bán lẻ và tốc độ mở mới hàng năm"
+    },
+    {
+      "criteria_id": "CRIT_02",
+      "name": "Mức độ phù hợp sản phẩm (Product-Market Fit)",
+      "weight": 0.30,
+      "description": "Tỷ lệ nhu cầu tính năng của khách hàng khớp với năng lực giải pháp hiện có của Hưng Phát"
+    },
+    {
+      "criteria_id": "CRIT_03",
+      "name": "Môi trường cạnh tranh và Dư địa thị phần",
+      "weight": 0.20,
+      "description": "Đánh giá mức độ độc quyền của đối thủ; ưu tiên địa bàn chưa bị chiếm lĩnh bởi giải pháp lớn"
+    },
+    {
+      "criteria_id": "CRIT_04",
+      "name": "Khả năng triển khai và Hỗ trợ tại chỗ",
+      "weight": 0.25,
+      "description": "Đánh giá mức độ đáp ứng yêu cầu hỗ trợ tại chỗ của khách hàng theo năng lực SLA hiện tại",
+      "is_hard_constraint": true
+    }
+  ],
+  "market_documents": [
+    {
+      "doc_id": "MKT-MEGA-01",
+      "location_id": "LOC_MEGA",
+      "title": "Báo cáo Thị trường Bán lẻ Siêu Đô Thị 2025",
+      "source": "Tập đoàn Phân tích Dữ liệu Quốc gia",
+      "timestamp": "2025-12-01",
+      "retail_stores_count": 9500,
+      "annual_growth_rate_pct": 24.5,
+      "market_size_vnd_bil": 5400,
+      "duplicate_flag": false,
+      "key_findings": "Quy mô thị trường khổng lồ, điểm số tiềm năng tuyệt đối 10/10."
+    },
+    {
+      "doc_id": "MKT-A-01",
+      "location_id": "LOC_A",
+      "title": "Báo cáo Bán lẻ Miền Bắc",
+      "source": "Viện Nghiên cứu Bán lẻ",
+      "timestamp": "2025-11-20",
+      "retail_stores_count": 4200,
+      "annual_growth_rate_pct": 14.5,
+      "market_size_vnd_bil": 1850,
+      "duplicate_flag": false,
+      "key_findings": "Tăng trưởng ổn định, thị trường quen thuộc."
+    },
+    {
+      "doc_id": "MKT-B-01",
+      "location_id": "LOC_B",
+      "title": "Báo cáo Bán lẻ Miền Trung",
+      "source": "Sở Công Thương",
+      "timestamp": "2025-10-15",
+      "retail_stores_count": 1850,
+      "annual_growth_rate_pct": 18.2,
+      "market_size_vnd_bil": 920,
+      "duplicate_flag": false,
+      "key_findings": "Tốc độ phát triển cao, thị trường tiềm năng."
+    },
+    {
+      "doc_id": "MKT-D-01",
+      "location_id": "LOC_D",
+      "title": "Báo cáo Bán lẻ Tây Nam Bộ",
+      "source": "Sở Công Thương ĐBSCL",
+      "timestamp": "2025-06-12",
+      "retail_stores_count": 1200,
+      "annual_growth_rate_pct": 8.5,
+      "market_size_vnd_bil": 450,
+      "duplicate_flag": false,
+      "key_findings": "Quy mô khiêm tốn."
+    }
+  ],
+  "competitor_profiles": [
+    {
+      "location_id": "LOC_MEGA",
+      "competitors": [
+        {
+          "name": "Đối thủ Local",
+          "market_share_pct": 20.0,
+          "target_segment": "Tạp hóa",
+          "strengths": "Giá rẻ",
+          "weaknesses": "Lỗi phần mềm liên tục"
+        }
+      ],
+      "competitive_landscape_summary": "Dư địa rộng lớn cho giải pháp chuyên nghiệp như Hưng Phát."
+    },
+    {
+      "location_id": "LOC_A",
+      "competitors": [
+        {
+          "name": "Alpha WMS",
+          "market_share_pct": 28.0,
+          "target_segment": "Sản xuất lớn",
+          "strengths": "Lâu năm",
+          "weaknesses": "Không linh hoạt"
+        }
+      ],
+      "competitive_landscape_summary": "Dư địa tốt."
+    },
+    {
+      "location_id": "LOC_B",
+      "competitors": [
+        {
+          "name": "Đại lý nhỏ lẻ",
+          "market_share_pct": 15.0,
+          "target_segment": "Cửa hàng đơn",
+          "strengths": "Tại chỗ",
+          "weaknesses": "Không có hệ thống chuỗi"
+        }
+      ],
+      "competitive_landscape_summary": "Chưa có đối thủ thống lĩnh."
+    },
+    {
+      "location_id": "LOC_D",
+      "competitors": [],
+      "competitive_landscape_summary": "Phân mảnh."
+    }
+  ],
+  "customer_feedback": [
+    {
+      "location_id": "LOC_MEGA",
+      "sample_size": 120,
+      "demanded_features": [
+        "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+        "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)",
+        "Tích hợp máy quét mã vạch Barcode/QR cầm tay"
+      ],
+      "onsite_support_demanded": "BẮT BUỘC có kỹ sư trực ca đêm tận kho (22h00 - 6h00) có mặt trong 30 phút vì chuỗi vận hành giao hàng ban đêm liên tục. Nếu không cam kết on-site ban đêm sẽ không ký hợp đồng.",
+      "onsite_support_strictness": "Extreme_Night_Shift_Mandatory",
+      "feedback_notes": "Sản phẩm khớp 100% nhưng điều kiện hỗ trợ tại chỗ cực đoan vượt quá năng lực phục vụ của Hưng Phát."
+    },
+    {
+      "location_id": "LOC_A",
+      "sample_size": 45,
+      "demanded_features": [
+        "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+        "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)"
+      ],
+      "onsite_support_demanded": "Hỗ trợ giờ hành chính trong 2-4 giờ",
+      "onsite_support_strictness": "Standard"
+    },
+    {
+      "location_id": "LOC_B",
+      "sample_size": 32,
+      "demanded_features": [
+        "Quản lý vị trí ô kệ (Bin/Rack 2D/3D)",
+        "Kiểm soát lô, date, hạn sử dụng (FIFO/FEFO)"
+      ],
+      "onsite_support_demanded": "Hỗ trợ on-site ban đầu, sau đó remote",
+      "onsite_support_strictness": "Flexible"
+    },
+    {
+      "location_id": "LOC_D",
+      "sample_size": 25,
+      "demanded_features": [
+        "Quản lý tồn kho cơ bản giá rẻ"
+      ],
+      "onsite_support_demanded": "On-site 1-2h",
+      "onsite_support_strictness": "Ultra_Strict_Immediate"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Temporary outputs & logs (giữ lại cấu trúc thư mục với .gitkeep)
+outputs/*
+!outputs/.gitkeep
+
+# User file uploads
+uploads/*
+!uploads/.gitkeep
+
+# Environment & Virtualenv
+.venv/
+env/
+venv/
+ENV/
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.bak
+*.zip

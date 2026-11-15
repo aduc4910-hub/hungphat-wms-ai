@@ -1,0 +1,1314 @@
+[
+  {
+    "id": "ed749cab",
+    "timestamp": "2026-11-15 22:50:53",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 0/6 nhóm đã nạp, 6/6 nhóm còn thiếu (Gồm 1 rủi ro NGUY CẤP, 5 rủi ro CAO). Tổng số: 0 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 22:50:53",
+      "is_confirmed": true,
+      "is_complete": false,
+      "total_documents": 0,
+      "ready_groups": [],
+      "missing_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "group_counts": {
+        "market_research": 0,
+        "competitor_data": 0,
+        "customer_feedback": 0,
+        "product_catalog": 0,
+        "deployment_capacity": 0,
+        "evaluation_criteria": 0
+      },
+      "ready_details": [],
+      "missing_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "severity": "HIGH",
+          "risk_title": "Mở chi nhánh sai địa bàn, nhu cầu thấp & thua lỗ chi phí cố định",
+          "risk_if_missing": "Không thể xác định dung lượng cửa hàng bán lẻ, tốc độ tăng trưởng và mức độ số hóa kho bãi của 4 địa bàn. Doanh nghiệp đối mặt nguy cơ rót vốn mở chi nhánh vào nơi thị trường bão hòa hoặc quá nhỏ, dẫn đến gánh nặng chi phí cố định (kho, nhân sự) và nguy cơ thua lỗ kéo dài."
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "severity": "HIGH",
+          "risk_title": "Định giá sai lầm & bị đối thủ bản địa chèn ép, triệt hạ thị phần",
+          "risk_if_missing": "Không nắm được thị phần, mức giá chào bán và ưu/nhược điểm công nghệ của đối thủ tại từng vùng. Hưng Phát dễ định giá sai (quá đắt khiến khách bỏ đi, hoặc quá rẻ làm giảm biên lợi nhuận), hoặc đâm đầu vào phân khúc mà đối thủ độc quyền kiểm soát."
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "severity": "HIGH",
+          "risk_title": "Chào sai tính năng (Lệch PMF) & tỷ lệ chốt đơn thất bại cao",
+          "risk_if_missing": "Không nắm bắt được 'nỗi đau' thực tế của chủ kho bán lẻ (thất thoát hàng hạn date FEFO, lỗi quét Barcode/QR, nghẽn đồng bộ POS giờ cao điểm). Sales tiếp thị tính năng chung chung, khách hàng từ chối dùng thử, chu kỳ bán hàng kéo dài và tỷ lệ chuyển đổi đơn hàng cực thấp."
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "severity": "HIGH",
+          "risk_title": "Bán giải pháp vượt quá tính năng phần mềm & phát sinh chi phí đền bù",
+          "risk_if_missing": "Thiếu danh mục module chuẩn của phần mềm Hưng Phát WMS. Đội ngũ kinh doanh dễ hứa hẹn tính năng mà phần mềm chưa hỗ trợ, dẫn đến xung đột khi bàn giao kỹ thuật, phát sinh chi phí customize ngoài ngân sách và mất uy tín thương hiệu."
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "severity": "CRITICAL",
+          "risk_title": "Vỡ cam kết SLA on-site, sập kho khách hàng & bị phạt hợp đồng",
+          "risk_if_missing": "Đặc thù kho bán lẻ vận hành liên tục 24/7. Nếu mở chi nhánh tại địa bàn không có trạm kỹ thuật tại chỗ hoặc bán kính vượt quá 10km, khi hệ thống quét mã/xuất kho gặp sự cố ban đêm, kỹ thuật viên không thể có mặt xử lý kịp trong 30-60 phút. Kho hàng bị đình trệ, hư hỏng chuỗi cung ứng, Hưng Phát đối mặt nguy cơ bị kiện phạt và mất khách hàng lớn!"
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "severity": "HIGH",
+          "risk_title": "Quyết định theo cảm tính, mất tính khách quan & tranh cãi nội bộ",
+          "risk_if_missing": "Không có bảng trọng số khoa học (MCDA) và các ràng buộc loại trừ cứng. Việc xếp hạng địa bàn ưu tiên sẽ mang tính chủ quan của người làm báo cáo, dễ xảy ra bất đồng nội bộ, khó bảo vệ luận điểm trước Hội đồng Quản trị và không đảm bảo tính nhất quán trong chiến lược phát triển."
+        }
+      ],
+      "risk_summary": {
+        "has_critical": true,
+        "critical_count": 1,
+        "high_count": 5,
+        "total_missing": 6,
+        "status_flag": "CRITICAL_MISSING_RISK"
+      }
+    }
+  },
+  {
+    "id": "6521e466",
+    "timestamp": "2026-11-15 22:30:26",
+    "action": "DELETE_LATEST_FILE",
+    "message": "🧹 Đã xóa tệp tin mới nhất: 'Hung_Phat_Test_Data_5_Steps.xlsx' (6 bản ghi). Toàn bộ quy trình 5 bước được reset về trạng thái ban đầu để nhận file mới.",
+    "details": {
+      "deleted_file": "Hung_Phat_Test_Data_5_Steps.xlsx",
+      "deleted_count": 6,
+      "remaining_count": 0
+    }
+  },
+  {
+    "id": "dbb0b317",
+    "timestamp": "2026-11-15 21:46:24",
+    "action": "CONFIRM_STEP_05",
+    "message": "Hội đồng Thẩm định & Ban Giám đốc đã phê duyệt kết quả đánh giá & lựa chọn 2 địa bàn ưu tiên Bước 5 (Gate 4). Đã hoàn tất toàn bộ quy trình 5 bước AI chuẩn hóa.",
+    "details": {
+      "confirmed_at": "2026-11-15 21:46:24",
+      "notes": "Hội đồng Thẩm định & Ban Giám đốc thống nhất đề xuất lựa chọn 2 địa bàn ưu tiên: Hà Nội (Top 1) và Đà Nẵng (Top 2). Giao bộ phận chuyên trách chuẩn bị phương án triển khai."
+    }
+  },
+  {
+    "id": "47d4acc5",
+    "timestamp": "2026-11-15 21:46:03",
+    "action": "STEP_05_LOCATION_EVALUATION",
+    "message": "Hoàn thành đánh giá & so sánh 4 khu vực Bước 5 theo phương pháp MCDA. Đề xuất Top 2 ưu tiên: Hà Nội (8.95) & Đà Nẵng (8.43). Chờ Hội đồng Thẩm định & Ban Giám đốc phê duyệt Gate 4.",
+    "details": {
+      "evaluated_at": "2026-11-15 21:46:03",
+      "top_1": "Hà Nội",
+      "top_2": "Đà Nẵng"
+    }
+  },
+  {
+    "id": "f879ab3b",
+    "timestamp": "2026-11-15 21:45:53",
+    "action": "STEP_04_DEPLOYMENT_ASSESSMENT",
+    "message": "Hoàn thành đánh giá năng lực triển khai 4 khu vực Bước 4. Đã xuất 4 báo cáo chuẩn (Resource Capacity, Requirements, Gap Analysis, Risks & Costs). Mức độ đáp ứng năng lực bình quân: 60.0%. Chờ Trưởng bộ phận Triển khai phê duyệt Gate 3. Không tự động chuyển sang Bước 5.",
+    "details": {
+      "assessed_at": "2026-11-15 21:45:53",
+      "avg_fit": 60.0
+    }
+  },
+  {
+    "id": "062e357e",
+    "timestamp": "2026-11-15 21:45:04",
+    "action": "CONFIRM_STEP_03",
+    "message": "Trưởng phòng Kinh doanh đã phê duyệt và khóa hồ sơ phân tích thị trường Bước 3 (Gate 2). Không tự động chuyển sang Bước 4.",
+    "details": {
+      "confirmed_at": "2026-11-15 21:45:04",
+      "notes": "Trưởng phòng Phát triển Kinh doanh xác nhận kết quả phân tích thị trường 4 địa bàn. Nhận định độ khớp PMF cao tại Hà Nội và Đà Nẵng."
+    }
+  },
+  {
+    "id": "f382939f",
+    "timestamp": "2026-11-15 21:44:50",
+    "action": "STEP_03_MARKET_ANALYSIS",
+    "message": "Hoàn thành phân tích thị trường 4 khu vực Bước 3. Đã xuất 5 báo cáo chuyên đề (Overview, Needs, Competitors, PMF, Opportunities). PMF bình quân: 68.8%. Chờ Trưởng phòng phê duyệt Gate 2.",
+    "details": {
+      "analyzed_at": "2026-11-15 21:44:50",
+      "avg_pmf": 68.8
+    }
+  },
+  {
+    "id": "597ce673",
+    "timestamp": "2026-11-15 21:44:42",
+    "action": "STEP_02_MANAGER_APPROVAL",
+    "message": "Trưởng phòng KD đã ký duyệt xác nhận kết quả kiểm định Bước 2 (HITL Gate 1). Dữ liệu sạch đã sẵn sàng.",
+    "details": {
+      "resolution": "prefer_latest_primary_2025",
+      "notes": "Trưởng phòng Phát triển Kinh doanh xác nhận chọn số liệu Viện Nghiên cứu 2025 và cách ly số liệu cũ."
+    }
+  },
+  {
+    "id": "5d6105a8",
+    "timestamp": "2026-11-15 21:44:21",
+    "action": "STEP_02_VALIDATION",
+    "message": "Hoàn tất kiểm định & làm sạch dữ liệu Bước 2. Data Health Score: 85.0%. Trạng thái: NEEDS_REVIEW. Phát hiện 1 trùng lặp, 1 mâu thuẫn.",
+    "details": {
+      "health_score": 85.0,
+      "status": "NEEDS_REVIEW"
+    }
+  },
+  {
+    "id": "56c2014d",
+    "timestamp": "2026-11-15 21:43:34",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 6/6 nhóm đã nạp, 0/6 nhóm còn thiếu (Gồm 0 rủi ro NGUY CẤP, 0 rủi ro CAO). Tổng số: 6 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 21:43:34",
+      "is_confirmed": true,
+      "is_complete": true,
+      "total_documents": 6,
+      "ready_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "missing_groups": [],
+      "group_counts": {
+        "market_research": 1,
+        "competitor_data": 1,
+        "customer_feedback": 1,
+        "product_catalog": 1,
+        "deployment_capacity": 1,
+        "evaluation_criteria": 1
+      },
+      "ready_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "count": 1
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "count": 1
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "count": 1
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "count": 1
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "count": 1
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "count": 1
+        }
+      ],
+      "missing_details": [],
+      "risk_summary": {
+        "has_critical": false,
+        "critical_count": 0,
+        "high_count": 0,
+        "total_missing": 0,
+        "status_flag": "COMPLETE_VERIFIED"
+      }
+    }
+  },
+  {
+    "id": "3eb2516b",
+    "timestamp": "2026-11-15 21:43:31",
+    "action": "ALL_IN_ONE_EXTRACT",
+    "message": "⚡ TIẾP NHẬN BÁO CÁO ALL-IN-ONE: Tự động bóc tách file tổng hợp 'Hung_Phat_Test_Data_5_Steps.xlsx' thành đủ 6 nhóm dữ liệu nghiệp vụ chuẩn.",
+    "details": {
+      "master_id": "MASTER_397B5C",
+      "file_name": "Hung_Phat_Test_Data_5_Steps.xlsx",
+      "storage_path": "uploads/all_in_one/20261115_214331_MASTER_Hung_Phat_Test_Data_5_Steps.xlsx",
+      "extracted_groups_count": 6,
+      "groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ]
+    }
+  },
+  {
+    "id": "4a36cf6c",
+    "timestamp": "2026-11-15 21:43:05",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 0/6 nhóm đã nạp, 6/6 nhóm còn thiếu (Gồm 1 rủi ro NGUY CẤP, 5 rủi ro CAO). Tổng số: 0 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 21:43:05",
+      "is_confirmed": true,
+      "is_complete": false,
+      "total_documents": 0,
+      "ready_groups": [],
+      "missing_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "group_counts": {
+        "market_research": 0,
+        "competitor_data": 0,
+        "customer_feedback": 0,
+        "product_catalog": 0,
+        "deployment_capacity": 0,
+        "evaluation_criteria": 0
+      },
+      "ready_details": [],
+      "missing_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "severity": "HIGH",
+          "risk_title": "Mở chi nhánh sai địa bàn, nhu cầu thấp & thua lỗ chi phí cố định",
+          "risk_if_missing": "Không thể xác định dung lượng cửa hàng bán lẻ, tốc độ tăng trưởng và mức độ số hóa kho bãi của 4 địa bàn. Doanh nghiệp đối mặt nguy cơ rót vốn mở chi nhánh vào nơi thị trường bão hòa hoặc quá nhỏ, dẫn đến gánh nặng chi phí cố định (kho, nhân sự) và nguy cơ thua lỗ kéo dài."
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "severity": "HIGH",
+          "risk_title": "Định giá sai lầm & bị đối thủ bản địa chèn ép, triệt hạ thị phần",
+          "risk_if_missing": "Không nắm được thị phần, mức giá chào bán và ưu/nhược điểm công nghệ của đối thủ tại từng vùng. Hưng Phát dễ định giá sai (quá đắt khiến khách bỏ đi, hoặc quá rẻ làm giảm biên lợi nhuận), hoặc đâm đầu vào phân khúc mà đối thủ độc quyền kiểm soát."
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "severity": "HIGH",
+          "risk_title": "Chào sai tính năng (Lệch PMF) & tỷ lệ chốt đơn thất bại cao",
+          "risk_if_missing": "Không nắm bắt được 'nỗi đau' thực tế của chủ kho bán lẻ (thất thoát hàng hạn date FEFO, lỗi quét Barcode/QR, nghẽn đồng bộ POS giờ cao điểm). Sales tiếp thị tính năng chung chung, khách hàng từ chối dùng thử, chu kỳ bán hàng kéo dài và tỷ lệ chuyển đổi đơn hàng cực thấp."
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "severity": "HIGH",
+          "risk_title": "Bán giải pháp vượt quá tính năng phần mềm & phát sinh chi phí đền bù",
+          "risk_if_missing": "Thiếu danh mục module chuẩn của phần mềm Hưng Phát WMS. Đội ngũ kinh doanh dễ hứa hẹn tính năng mà phần mềm chưa hỗ trợ, dẫn đến xung đột khi bàn giao kỹ thuật, phát sinh chi phí customize ngoài ngân sách và mất uy tín thương hiệu."
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "severity": "CRITICAL",
+          "risk_title": "Vỡ cam kết SLA on-site, sập kho khách hàng & bị phạt hợp đồng",
+          "risk_if_missing": "Đặc thù kho bán lẻ vận hành liên tục 24/7. Nếu mở chi nhánh tại địa bàn không có trạm kỹ thuật tại chỗ hoặc bán kính vượt quá 10km, khi hệ thống quét mã/xuất kho gặp sự cố ban đêm, kỹ thuật viên không thể có mặt xử lý kịp trong 30-60 phút. Kho hàng bị đình trệ, hư hỏng chuỗi cung ứng, Hưng Phát đối mặt nguy cơ bị kiện phạt và mất khách hàng lớn!"
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "severity": "HIGH",
+          "risk_title": "Quyết định theo cảm tính, mất tính khách quan & tranh cãi nội bộ",
+          "risk_if_missing": "Không có bảng trọng số khoa học (MCDA) và các ràng buộc loại trừ cứng. Việc xếp hạng địa bàn ưu tiên sẽ mang tính chủ quan của người làm báo cáo, dễ xảy ra bất đồng nội bộ, khó bảo vệ luận điểm trước Hội đồng Quản trị và không đảm bảo tính nhất quán trong chiến lược phát triển."
+        }
+      ],
+      "risk_summary": {
+        "has_critical": true,
+        "critical_count": 1,
+        "high_count": 5,
+        "total_missing": 6,
+        "status_flag": "CRITICAL_MISSING_RISK"
+      }
+    }
+  },
+  {
+    "id": "371865c6",
+    "timestamp": "2026-11-15 21:19:44",
+    "action": "DELETE_LATEST_FILE",
+    "message": "🧹 Đã xóa tệp tin mới nhất: 'Hung_Phat_Test_Data_5_Steps.xlsx' (6 bản ghi). Toàn bộ quy trình 5 bước được reset về trạng thái ban đầu để nhận file mới.",
+    "details": {
+      "deleted_file": "Hung_Phat_Test_Data_5_Steps.xlsx",
+      "deleted_count": 6,
+      "remaining_count": 0
+    }
+  },
+  {
+    "id": "1de7afdf",
+    "timestamp": "2026-11-15 21:19:37",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 6/6 nhóm đã nạp, 0/6 nhóm còn thiếu (Gồm 0 rủi ro NGUY CẤP, 0 rủi ro CAO). Tổng số: 6 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 21:19:37",
+      "is_confirmed": true,
+      "is_complete": true,
+      "total_documents": 6,
+      "ready_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "missing_groups": [],
+      "group_counts": {
+        "market_research": 1,
+        "competitor_data": 1,
+        "customer_feedback": 1,
+        "product_catalog": 1,
+        "deployment_capacity": 1,
+        "evaluation_criteria": 1
+      },
+      "ready_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "count": 1
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "count": 1
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "count": 1
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "count": 1
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "count": 1
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "count": 1
+        }
+      ],
+      "missing_details": [],
+      "risk_summary": {
+        "has_critical": false,
+        "critical_count": 0,
+        "high_count": 0,
+        "total_missing": 0,
+        "status_flag": "COMPLETE_VERIFIED"
+      }
+    }
+  },
+  {
+    "id": "7298363e",
+    "timestamp": "2026-11-15 21:19:30",
+    "action": "ALL_IN_ONE_EXTRACT",
+    "message": "⚡ TIẾP NHẬN BÁO CÁO ALL-IN-ONE: Tự động bóc tách file tổng hợp 'Hung_Phat_Test_Data_5_Steps.xlsx' thành đủ 6 nhóm dữ liệu nghiệp vụ chuẩn.",
+    "details": {
+      "master_id": "MASTER_E4E6DD",
+      "file_name": "Hung_Phat_Test_Data_5_Steps.xlsx",
+      "storage_path": "uploads/all_in_one/20261115_211930_MASTER_Hung_Phat_Test_Data_5_Steps.xlsx",
+      "extracted_groups_count": 6,
+      "groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ]
+    }
+  },
+  {
+    "id": "a4a63ab0",
+    "timestamp": "2026-11-15 21:17:43",
+    "action": "CLEAR_ALL_FILES",
+    "message": "🧹 Đã xóa toàn bộ 0 tài liệu trong kho lưu trữ và dọn dẹp thư mục uploads. Toàn bộ quy trình 5 bước được reset về trạng thái ban đầu (con số 0).",
+    "details": {
+      "cleared_documents_count": 0
+    }
+  },
+  {
+    "id": "51e321c1",
+    "timestamp": "2026-11-15 21:17:09",
+    "action": "DELETE_LATEST_FILE",
+    "message": "🧹 Đã xóa tệp tin mới nhất: 'Hung_Phat_Test_Data_5_Steps.xlsx' (6 bản ghi). Toàn bộ quy trình 5 bước được reset về trạng thái ban đầu để nhận file mới.",
+    "details": {
+      "deleted_file": "Hung_Phat_Test_Data_5_Steps.xlsx",
+      "deleted_count": 6,
+      "remaining_count": 0
+    }
+  },
+  {
+    "id": "07aed288",
+    "timestamp": "2026-11-15 21:01:36",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 6/6 nhóm đã nạp, 0/6 nhóm còn thiếu (Gồm 0 rủi ro NGUY CẤP, 0 rủi ro CAO). Tổng số: 6 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 21:01:36",
+      "is_confirmed": true,
+      "is_complete": true,
+      "total_documents": 6,
+      "ready_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "missing_groups": [],
+      "group_counts": {
+        "market_research": 1,
+        "competitor_data": 1,
+        "customer_feedback": 1,
+        "product_catalog": 1,
+        "deployment_capacity": 1,
+        "evaluation_criteria": 1
+      },
+      "ready_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "count": 1
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "count": 1
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "count": 1
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "count": 1
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "count": 1
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "count": 1
+        }
+      ],
+      "missing_details": [],
+      "risk_summary": {
+        "has_critical": false,
+        "critical_count": 0,
+        "high_count": 0,
+        "total_missing": 0,
+        "status_flag": "COMPLETE_VERIFIED"
+      }
+    }
+  },
+  {
+    "id": "63e4cb77",
+    "timestamp": "2026-11-15 21:01:30",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 6/6 nhóm đã nạp, 0/6 nhóm còn thiếu (Gồm 0 rủi ro NGUY CẤP, 0 rủi ro CAO). Tổng số: 6 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 21:01:30",
+      "is_confirmed": true,
+      "is_complete": true,
+      "total_documents": 6,
+      "ready_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "missing_groups": [],
+      "group_counts": {
+        "market_research": 1,
+        "competitor_data": 1,
+        "customer_feedback": 1,
+        "product_catalog": 1,
+        "deployment_capacity": 1,
+        "evaluation_criteria": 1
+      },
+      "ready_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "count": 1
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "count": 1
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "count": 1
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "count": 1
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "count": 1
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "count": 1
+        }
+      ],
+      "missing_details": [],
+      "risk_summary": {
+        "has_critical": false,
+        "critical_count": 0,
+        "high_count": 0,
+        "total_missing": 0,
+        "status_flag": "COMPLETE_VERIFIED"
+      }
+    }
+  },
+  {
+    "id": "37fb3bab",
+    "timestamp": "2026-11-15 20:57:02",
+    "action": "CONFIRM_STEP_05",
+    "message": "Hội đồng Thẩm định & Ban Giám đốc đã phê duyệt kết quả đánh giá & lựa chọn 2 địa bàn ưu tiên Bước 5 (Gate 4). Đã hoàn tất toàn bộ quy trình 5 bước AI chuẩn hóa.",
+    "details": {
+      "confirmed_at": "2026-11-15 20:57:02",
+      "notes": "Hội đồng Thẩm định & Ban Giám đốc thống nhất đề xuất lựa chọn 2 địa bàn ưu tiên: Hà Nội (Top 1) và Đà Nẵng (Top 2). Giao bộ phận chuyên trách chuẩn bị phương án triển khai."
+    }
+  },
+  {
+    "id": "5967ace0",
+    "timestamp": "2026-11-15 20:56:32",
+    "action": "STEP_05_LOCATION_EVALUATION",
+    "message": "Hoàn thành đánh giá & so sánh 4 khu vực Bước 5 theo phương pháp MCDA. Đề xuất Top 2 ưu tiên: Hà Nội (8.95) & Đà Nẵng (8.43). Chờ Hội đồng Thẩm định & Ban Giám đốc phê duyệt Gate 4.",
+    "details": {
+      "evaluated_at": "2026-11-15 20:56:32",
+      "top_1": "Hà Nội",
+      "top_2": "Đà Nẵng"
+    }
+  },
+  {
+    "id": "696caf96",
+    "timestamp": "2026-11-15 20:55:26",
+    "action": "CONFIRM_STEP_04",
+    "message": "Trưởng bộ phận Triển khai đã phê duyệt hồ sơ năng lực triển khai Bước 4 (Gate 3). Lưu ý: Không tự động chấm điểm tổng hợp, không xếp hạng và không tự động chuyển sang Bước 5.",
+    "details": {
+      "confirmed_at": "2026-11-15 20:55:26",
+      "notes": "Trưởng bộ phận Triển khai xác nhận kết quả đánh giá năng lực 4 địa bàn. Ghi nhận cảnh báo Gap nghiêm trọng về nhân sự trực 24/7 tại TP.HCM và khoảng cách hỗ trợ tại Cần Thơ."
+    }
+  },
+  {
+    "id": "d99ba5ab",
+    "timestamp": "2026-11-15 20:55:10",
+    "action": "STEP_04_DEPLOYMENT_ASSESSMENT",
+    "message": "Hoàn thành đánh giá năng lực triển khai 4 khu vực Bước 4. Đã xuất 4 báo cáo chuẩn (Resource Capacity, Requirements, Gap Analysis, Risks & Costs). Mức độ đáp ứng năng lực bình quân: 60.0%. Chờ Trưởng bộ phận Triển khai phê duyệt Gate 3. Không tự động chuyển sang Bước 5.",
+    "details": {
+      "assessed_at": "2026-11-15 20:55:10",
+      "avg_fit": 60.0
+    }
+  },
+  {
+    "id": "c59b681e",
+    "timestamp": "2026-11-15 20:53:41",
+    "action": "CONFIRM_STEP_03",
+    "message": "Trưởng phòng Kinh doanh đã phê duyệt và khóa hồ sơ phân tích thị trường Bước 3 (Gate 2). Không tự động chuyển sang Bước 4.",
+    "details": {
+      "confirmed_at": "2026-11-15 20:53:41",
+      "notes": "Trưởng phòng Phát triển Kinh doanh xác nhận kết quả phân tích thị trường 4 địa bàn. Nhận định độ khớp PMF cao tại Hà Nội và Đà Nẵng."
+    }
+  },
+  {
+    "id": "93c5a5d0",
+    "timestamp": "2026-11-15 20:53:26",
+    "action": "STEP_03_MARKET_ANALYSIS",
+    "message": "Hoàn thành phân tích thị trường 4 khu vực Bước 3. Đã xuất 5 báo cáo chuyên đề (Overview, Needs, Competitors, PMF, Opportunities). PMF bình quân: 68.8%. Chờ Trưởng phòng phê duyệt Gate 2.",
+    "details": {
+      "analyzed_at": "2026-11-15 20:53:26",
+      "avg_pmf": 68.8
+    }
+  },
+  {
+    "id": "bca93c4c",
+    "timestamp": "2026-11-15 20:52:48",
+    "action": "STEP_03_MARKET_ANALYSIS",
+    "message": "Hoàn thành phân tích thị trường 4 khu vực Bước 3. Đã xuất 5 báo cáo chuyên đề (Overview, Needs, Competitors, PMF, Opportunities). PMF bình quân: 68.8%. Chờ Trưởng phòng phê duyệt Gate 2.",
+    "details": {
+      "analyzed_at": "2026-11-15 20:52:48",
+      "avg_pmf": 68.8
+    }
+  },
+  {
+    "id": "8277571a",
+    "timestamp": "2026-11-15 20:52:39",
+    "action": "STEP_02_MANAGER_APPROVAL",
+    "message": "Trưởng phòng KD đã ký duyệt xác nhận kết quả kiểm định Bước 2 (HITL Gate 1). Dữ liệu sạch đã sẵn sàng.",
+    "details": {
+      "resolution": "prefer_latest_primary_2025",
+      "notes": "Trưởng phòng Phát triển Kinh doanh xác nhận chọn số liệu Viện Nghiên cứu 2025 và cách ly số liệu cũ."
+    }
+  },
+  {
+    "id": "a7bc0360",
+    "timestamp": "2026-11-15 20:51:59",
+    "action": "STEP_02_VALIDATION",
+    "message": "Hoàn tất kiểm định & làm sạch dữ liệu Bước 2. Data Health Score: 85.0%. Trạng thái: NEEDS_REVIEW. Phát hiện 1 trùng lặp, 1 mâu thuẫn.",
+    "details": {
+      "health_score": 85.0,
+      "status": "NEEDS_REVIEW"
+    }
+  },
+  {
+    "id": "5e590858",
+    "timestamp": "2026-11-15 20:51:09",
+    "action": "ALL_IN_ONE_EXTRACT",
+    "message": "⚡ TIẾP NHẬN BÁO CÁO ALL-IN-ONE: Tự động bóc tách file tổng hợp 'Hung_Phat_Test_Data_5_Steps.xlsx' thành đủ 6 nhóm dữ liệu nghiệp vụ chuẩn.",
+    "details": {
+      "master_id": "MASTER_C8EF3E",
+      "file_name": "Hung_Phat_Test_Data_5_Steps.xlsx",
+      "storage_path": "uploads/all_in_one/20261115_205109_MASTER_Hung_Phat_Test_Data_5_Steps.xlsx",
+      "extracted_groups_count": 6,
+      "groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ]
+    }
+  },
+  {
+    "id": "35e9e89f",
+    "timestamp": "2026-11-15 14:26:56",
+    "action": "CONFIRM_STEP_05",
+    "message": "Hội đồng Thẩm định & Ban Giám đốc đã phê duyệt kết quả đánh giá & lựa chọn 2 địa bàn ưu tiên Bước 5 (Gate 4). Đã hoàn tất toàn bộ quy trình 5 bước AI chuẩn hóa.",
+    "details": {
+      "confirmed_at": "2026-11-15 14:26:56",
+      "notes": "Hội đồng Thẩm định & Ban Giám đốc phê duyệt đề xuất lựa chọn 2 địa bàn ưu tiên: Hà Nội & Đà Nẵng."
+    }
+  },
+  {
+    "id": "323f182d",
+    "timestamp": "2026-11-15 14:26:56",
+    "action": "STEP_05_LOCATION_EVALUATION",
+    "message": "Hoàn thành đánh giá & so sánh 4 khu vực Bước 5 theo phương pháp MCDA. Đề xuất Top 2 ưu tiên: Hà Nội (8.95) & Đà Nẵng (8.43). Chờ Hội đồng Thẩm định & Ban Giám đốc phê duyệt Gate 4.",
+    "details": {
+      "evaluated_at": "2026-11-15 14:26:56",
+      "top_1": "Hà Nội",
+      "top_2": "Đà Nẵng"
+    }
+  },
+  {
+    "id": "38a44d26",
+    "timestamp": "2026-11-15 14:26:56",
+    "action": "STEP_04_DEPLOYMENT_ASSESSMENT",
+    "message": "Hoàn thành đánh giá năng lực triển khai 4 khu vực Bước 4. Đã xuất 4 báo cáo chuẩn (Resource Capacity, Requirements, Gap Analysis, Risks & Costs). Mức độ đáp ứng năng lực bình quân: 60.0%. Chờ Trưởng bộ phận Triển khai phê duyệt Gate 3. Không tự động chuyển sang Bước 5.",
+    "details": {
+      "assessed_at": "2026-11-15 14:26:56",
+      "avg_fit": 60.0
+    }
+  },
+  {
+    "id": "893713d2",
+    "timestamp": "2026-11-15 14:26:56",
+    "action": "STEP_03_MARKET_ANALYSIS",
+    "message": "Hoàn thành phân tích thị trường 4 khu vực Bước 3. Đã xuất 5 báo cáo chuyên đề (Overview, Needs, Competitors, PMF, Opportunities). PMF bình quân: 68.8%. Chờ Trưởng phòng phê duyệt Gate 2.",
+    "details": {
+      "analyzed_at": "2026-11-15 14:26:56",
+      "avg_pmf": 68.8
+    }
+  },
+  {
+    "id": "0576d5bf",
+    "timestamp": "2026-11-15 14:12:02",
+    "action": "CONFIRM_STEP_04",
+    "message": "Trưởng bộ phận Triển khai đã phê duyệt hồ sơ năng lực triển khai Bước 4 (Gate 3). Lưu ý: Không tự động chấm điểm tổng hợp, không xếp hạng và không tự động chuyển sang Bước 5.",
+    "details": {
+      "confirmed_at": "2026-11-15 14:12:02",
+      "notes": "Trưởng bộ phận Triển khai phê duyệt kết quả đánh giá năng lực 4 địa bàn."
+    }
+  },
+  {
+    "id": "66e09f7a",
+    "timestamp": "2026-11-15 14:12:02",
+    "action": "STEP_04_DEPLOYMENT_ASSESSMENT",
+    "message": "Hoàn thành đánh giá năng lực triển khai 4 khu vực Bước 4. Đã xuất 4 báo cáo chuẩn (Resource Capacity, Requirements, Gap Analysis, Risks & Costs). Mức độ đáp ứng năng lực bình quân: 60.0%. Chờ Trưởng bộ phận Triển khai phê duyệt Gate 3. Không tự động chuyển sang Bước 5.",
+    "details": {
+      "assessed_at": "2026-11-15 14:12:02",
+      "avg_fit": 60.0
+    }
+  },
+  {
+    "id": "786c5571",
+    "timestamp": "2026-11-15 14:07:43",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 0/6 nhóm đã nạp, 6/6 nhóm còn thiếu (Gồm 1 rủi ro NGUY CẤP, 5 rủi ro CAO). Tổng số: 0 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 14:07:43",
+      "is_confirmed": true,
+      "is_complete": false,
+      "total_documents": 0,
+      "ready_groups": [],
+      "missing_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "group_counts": {
+        "market_research": 0,
+        "competitor_data": 0,
+        "customer_feedback": 0,
+        "product_catalog": 0,
+        "deployment_capacity": 0,
+        "evaluation_criteria": 0
+      },
+      "ready_details": [],
+      "missing_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "severity": "HIGH",
+          "risk_title": "Mở chi nhánh sai địa bàn, nhu cầu thấp & thua lỗ chi phí cố định",
+          "risk_if_missing": "Không thể xác định dung lượng cửa hàng bán lẻ, tốc độ tăng trưởng và mức độ số hóa kho bãi của 4 địa bàn. Doanh nghiệp đối mặt nguy cơ rót vốn mở chi nhánh vào nơi thị trường bão hòa hoặc quá nhỏ, dẫn đến gánh nặng chi phí cố định (kho, nhân sự) và nguy cơ thua lỗ kéo dài."
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "severity": "HIGH",
+          "risk_title": "Định giá sai lầm & bị đối thủ bản địa chèn ép, triệt hạ thị phần",
+          "risk_if_missing": "Không nắm được thị phần, mức giá chào bán và ưu/nhược điểm công nghệ của đối thủ tại từng vùng. Hưng Phát dễ định giá sai (quá đắt khiến khách bỏ đi, hoặc quá rẻ làm giảm biên lợi nhuận), hoặc đâm đầu vào phân khúc mà đối thủ độc quyền kiểm soát."
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "severity": "HIGH",
+          "risk_title": "Chào sai tính năng (Lệch PMF) & tỷ lệ chốt đơn thất bại cao",
+          "risk_if_missing": "Không nắm bắt được 'nỗi đau' thực tế của chủ kho bán lẻ (thất thoát hàng hạn date FEFO, lỗi quét Barcode/QR, nghẽn đồng bộ POS giờ cao điểm). Sales tiếp thị tính năng chung chung, khách hàng từ chối dùng thử, chu kỳ bán hàng kéo dài và tỷ lệ chuyển đổi đơn hàng cực thấp."
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "severity": "HIGH",
+          "risk_title": "Bán giải pháp vượt quá tính năng phần mềm & phát sinh chi phí đền bù",
+          "risk_if_missing": "Thiếu danh mục module chuẩn của phần mềm Hưng Phát WMS. Đội ngũ kinh doanh dễ hứa hẹn tính năng mà phần mềm chưa hỗ trợ, dẫn đến xung đột khi bàn giao kỹ thuật, phát sinh chi phí customize ngoài ngân sách và mất uy tín thương hiệu."
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "severity": "CRITICAL",
+          "risk_title": "Vỡ cam kết SLA on-site, sập kho khách hàng & bị phạt hợp đồng",
+          "risk_if_missing": "Đặc thù kho bán lẻ vận hành liên tục 24/7. Nếu mở chi nhánh tại địa bàn không có trạm kỹ thuật tại chỗ hoặc bán kính vượt quá 10km, khi hệ thống quét mã/xuất kho gặp sự cố ban đêm, kỹ thuật viên không thể có mặt xử lý kịp trong 30-60 phút. Kho hàng bị đình trệ, hư hỏng chuỗi cung ứng, Hưng Phát đối mặt nguy cơ bị kiện phạt và mất khách hàng lớn!"
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "severity": "HIGH",
+          "risk_title": "Quyết định theo cảm tính, mất tính khách quan & tranh cãi nội bộ",
+          "risk_if_missing": "Không có bảng trọng số khoa học (MCDA) và các ràng buộc loại trừ cứng. Việc xếp hạng địa bàn ưu tiên sẽ mang tính chủ quan của người làm báo cáo, dễ xảy ra bất đồng nội bộ, khó bảo vệ luận điểm trước Hội đồng Quản trị và không đảm bảo tính nhất quán trong chiến lược phát triển."
+        }
+      ],
+      "risk_summary": {
+        "has_critical": true,
+        "critical_count": 1,
+        "high_count": 5,
+        "total_missing": 6,
+        "status_flag": "CRITICAL_MISSING_RISK"
+      }
+    }
+  },
+  {
+    "id": "d692f180",
+    "timestamp": "2026-11-15 14:03:23",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 0/6 nhóm đã nạp, 6/6 nhóm còn thiếu (Gồm 1 rủi ro NGUY CẤP, 5 rủi ro CAO). Tổng số: 0 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 14:03:23",
+      "is_confirmed": true,
+      "is_complete": false,
+      "total_documents": 0,
+      "ready_groups": [],
+      "missing_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "group_counts": {
+        "market_research": 0,
+        "competitor_data": 0,
+        "customer_feedback": 0,
+        "product_catalog": 0,
+        "deployment_capacity": 0,
+        "evaluation_criteria": 0
+      },
+      "ready_details": [],
+      "missing_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "severity": "HIGH",
+          "risk_title": "Mở chi nhánh sai địa bàn, nhu cầu thấp & thua lỗ chi phí cố định",
+          "risk_if_missing": "Không thể xác định dung lượng cửa hàng bán lẻ, tốc độ tăng trưởng và mức độ số hóa kho bãi của 4 địa bàn. Doanh nghiệp đối mặt nguy cơ rót vốn mở chi nhánh vào nơi thị trường bão hòa hoặc quá nhỏ, dẫn đến gánh nặng chi phí cố định (kho, nhân sự) và nguy cơ thua lỗ kéo dài."
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "severity": "HIGH",
+          "risk_title": "Định giá sai lầm & bị đối thủ bản địa chèn ép, triệt hạ thị phần",
+          "risk_if_missing": "Không nắm được thị phần, mức giá chào bán và ưu/nhược điểm công nghệ của đối thủ tại từng vùng. Hưng Phát dễ định giá sai (quá đắt khiến khách bỏ đi, hoặc quá rẻ làm giảm biên lợi nhuận), hoặc đâm đầu vào phân khúc mà đối thủ độc quyền kiểm soát."
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "severity": "HIGH",
+          "risk_title": "Chào sai tính năng (Lệch PMF) & tỷ lệ chốt đơn thất bại cao",
+          "risk_if_missing": "Không nắm bắt được 'nỗi đau' thực tế của chủ kho bán lẻ (thất thoát hàng hạn date FEFO, lỗi quét Barcode/QR, nghẽn đồng bộ POS giờ cao điểm). Sales tiếp thị tính năng chung chung, khách hàng từ chối dùng thử, chu kỳ bán hàng kéo dài và tỷ lệ chuyển đổi đơn hàng cực thấp."
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "severity": "HIGH",
+          "risk_title": "Bán giải pháp vượt quá tính năng phần mềm & phát sinh chi phí đền bù",
+          "risk_if_missing": "Thiếu danh mục module chuẩn của phần mềm Hưng Phát WMS. Đội ngũ kinh doanh dễ hứa hẹn tính năng mà phần mềm chưa hỗ trợ, dẫn đến xung đột khi bàn giao kỹ thuật, phát sinh chi phí customize ngoài ngân sách và mất uy tín thương hiệu."
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "severity": "CRITICAL",
+          "risk_title": "Vỡ cam kết SLA on-site, sập kho khách hàng & bị phạt hợp đồng",
+          "risk_if_missing": "Đặc thù kho bán lẻ vận hành liên tục 24/7. Nếu mở chi nhánh tại địa bàn không có trạm kỹ thuật tại chỗ hoặc bán kính vượt quá 10km, khi hệ thống quét mã/xuất kho gặp sự cố ban đêm, kỹ thuật viên không thể có mặt xử lý kịp trong 30-60 phút. Kho hàng bị đình trệ, hư hỏng chuỗi cung ứng, Hưng Phát đối mặt nguy cơ bị kiện phạt và mất khách hàng lớn!"
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "severity": "HIGH",
+          "risk_title": "Quyết định theo cảm tính, mất tính khách quan & tranh cãi nội bộ",
+          "risk_if_missing": "Không có bảng trọng số khoa học (MCDA) và các ràng buộc loại trừ cứng. Việc xếp hạng địa bàn ưu tiên sẽ mang tính chủ quan của người làm báo cáo, dễ xảy ra bất đồng nội bộ, khó bảo vệ luận điểm trước Hội đồng Quản trị và không đảm bảo tính nhất quán trong chiến lược phát triển."
+        }
+      ],
+      "risk_summary": {
+        "has_critical": true,
+        "critical_count": 1,
+        "high_count": 5,
+        "total_missing": 6,
+        "status_flag": "CRITICAL_MISSING_RISK"
+      }
+    }
+  },
+  {
+    "id": "84d6244b",
+    "timestamp": "2026-11-15 13:48:18",
+    "action": "CONFIRM_STEP_03",
+    "message": "Trưởng phòng Kinh doanh đã phê duyệt và khóa hồ sơ phân tích thị trường Bước 3 (Gate 2). Không tự động chuyển sang Bước 4.",
+    "details": {
+      "confirmed_at": "2026-11-15 13:48:18",
+      "notes": "Trưởng phòng KD phê duyệt kết quả phân tích thị trường 4 địa bàn."
+    }
+  },
+  {
+    "id": "b5751290",
+    "timestamp": "2026-11-15 13:48:18",
+    "action": "STEP_03_MARKET_ANALYSIS",
+    "message": "Hoàn thành phân tích thị trường 4 khu vực Bước 3. Đã xuất 5 báo cáo chuyên đề (Overview, Needs, Competitors, PMF, Opportunities). PMF bình quân: 68.8%. Chờ Trưởng phòng phê duyệt Gate 2.",
+    "details": {
+      "analyzed_at": "2026-11-15 13:48:18",
+      "avg_pmf": 68.8
+    }
+  },
+  {
+    "id": "c269b976",
+    "timestamp": "2026-11-15 13:22:58",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 0/6 nhóm đã nạp, 6/6 nhóm còn thiếu (Gồm 1 rủi ro NGUY CẤP, 5 rủi ro CAO). Tổng số: 0 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 13:22:58",
+      "is_confirmed": true,
+      "is_complete": false,
+      "total_documents": 0,
+      "ready_groups": [],
+      "missing_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "group_counts": {
+        "market_research": 0,
+        "competitor_data": 0,
+        "customer_feedback": 0,
+        "product_catalog": 0,
+        "deployment_capacity": 0,
+        "evaluation_criteria": 0
+      },
+      "ready_details": [],
+      "missing_details": [
+        {
+          "id": "market_research",
+          "code": "GRP_01",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn",
+          "icon": "📈",
+          "severity": "HIGH",
+          "risk_title": "Mở chi nhánh sai địa bàn, nhu cầu thấp & thua lỗ chi phí cố định",
+          "risk_if_missing": "Không thể xác định dung lượng cửa hàng bán lẻ, tốc độ tăng trưởng và mức độ số hóa kho bãi của 4 địa bàn. Doanh nghiệp đối mặt nguy cơ rót vốn mở chi nhánh vào nơi thị trường bão hòa hoặc quá nhỏ, dẫn đến gánh nặng chi phí cố định (kho, nhân sự) và nguy cơ thua lỗ kéo dài."
+        },
+        {
+          "id": "competitor_data",
+          "code": "GRP_02",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh",
+          "icon": "🏢",
+          "severity": "HIGH",
+          "risk_title": "Định giá sai lầm & bị đối thủ bản địa chèn ép, triệt hạ thị phần",
+          "risk_if_missing": "Không nắm được thị phần, mức giá chào bán và ưu/nhược điểm công nghệ của đối thủ tại từng vùng. Hưng Phát dễ định giá sai (quá đắt khiến khách bỏ đi, hoặc quá rẻ làm giảm biên lợi nhuận), hoặc đâm đầu vào phân khúc mà đối thủ độc quyền kiểm soát."
+        },
+        {
+          "id": "customer_feedback",
+          "code": "GRP_03",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng",
+          "icon": "💬",
+          "severity": "HIGH",
+          "risk_title": "Chào sai tính năng (Lệch PMF) & tỷ lệ chốt đơn thất bại cao",
+          "risk_if_missing": "Không nắm bắt được 'nỗi đau' thực tế của chủ kho bán lẻ (thất thoát hàng hạn date FEFO, lỗi quét Barcode/QR, nghẽn đồng bộ POS giờ cao điểm). Sales tiếp thị tính năng chung chung, khách hàng từ chối dùng thử, chu kỳ bán hàng kéo dài và tỷ lệ chuyển đổi đơn hàng cực thấp."
+        },
+        {
+          "id": "product_catalog",
+          "code": "GRP_04",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho",
+          "icon": "📦",
+          "severity": "HIGH",
+          "risk_title": "Bán giải pháp vượt quá tính năng phần mềm & phát sinh chi phí đền bù",
+          "risk_if_missing": "Thiếu danh mục module chuẩn của phần mềm Hưng Phát WMS. Đội ngũ kinh doanh dễ hứa hẹn tính năng mà phần mềm chưa hỗ trợ, dẫn đến xung đột khi bàn giao kỹ thuật, phát sinh chi phí customize ngoài ngân sách và mất uy tín thương hiệu."
+        },
+        {
+          "id": "deployment_capacity",
+          "code": "GRP_05",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai",
+          "icon": "👥",
+          "severity": "CRITICAL",
+          "risk_title": "Vỡ cam kết SLA on-site, sập kho khách hàng & bị phạt hợp đồng",
+          "risk_if_missing": "Đặc thù kho bán lẻ vận hành liên tục 24/7. Nếu mở chi nhánh tại địa bàn không có trạm kỹ thuật tại chỗ hoặc bán kính vượt quá 10km, khi hệ thống quét mã/xuất kho gặp sự cố ban đêm, kỹ thuật viên không thể có mặt xử lý kịp trong 30-60 phút. Kho hàng bị đình trệ, hư hỏng chuỗi cung ứng, Hưng Phát đối mặt nguy cơ bị kiện phạt và mất khách hàng lớn!"
+        },
+        {
+          "id": "evaluation_criteria",
+          "code": "GRP_06",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn",
+          "icon": "⚖️",
+          "severity": "HIGH",
+          "risk_title": "Quyết định theo cảm tính, mất tính khách quan & tranh cãi nội bộ",
+          "risk_if_missing": "Không có bảng trọng số khoa học (MCDA) và các ràng buộc loại trừ cứng. Việc xếp hạng địa bàn ưu tiên sẽ mang tính chủ quan của người làm báo cáo, dễ xảy ra bất đồng nội bộ, khó bảo vệ luận điểm trước Hội đồng Quản trị và không đảm bảo tính nhất quán trong chiến lược phát triển."
+        }
+      ],
+      "risk_summary": {
+        "has_critical": true,
+        "critical_count": 1,
+        "high_count": 5,
+        "total_missing": 6,
+        "status_flag": "CRITICAL_MISSING_RISK"
+      }
+    }
+  },
+  {
+    "id": "c84aa8d1",
+    "timestamp": "2026-11-15 13:11:19",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 0/6 nhóm đã nạp, 6/6 nhóm còn thiếu. Tổng số: 0 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 13:11:19",
+      "is_confirmed": true,
+      "is_complete": false,
+      "total_documents": 0,
+      "ready_groups": [],
+      "missing_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "group_counts": {
+        "market_research": 0,
+        "competitor_data": 0,
+        "customer_feedback": 0,
+        "product_catalog": 0,
+        "deployment_capacity": 0,
+        "evaluation_criteria": 0
+      },
+      "ready_details": [],
+      "missing_details": [
+        {
+          "id": "market_research",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn"
+        },
+        {
+          "id": "competitor_data",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh"
+        },
+        {
+          "id": "customer_feedback",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng"
+        },
+        {
+          "id": "product_catalog",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho"
+        },
+        {
+          "id": "deployment_capacity",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai"
+        },
+        {
+          "id": "evaluation_criteria",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn"
+        }
+      ]
+    }
+  },
+  {
+    "id": "58035978",
+    "timestamp": "2026-11-15 13:11:15",
+    "action": "CONFIRM_DATA_INPUT",
+    "message": "Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: 0/6 nhóm đã nạp, 6/6 nhóm còn thiếu. Tổng số: 0 tài liệu. Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích.",
+    "details": {
+      "confirmed_at": "2026-11-15 13:11:15",
+      "is_confirmed": true,
+      "is_complete": false,
+      "total_documents": 0,
+      "ready_groups": [],
+      "missing_groups": [
+        "market_research",
+        "competitor_data",
+        "customer_feedback",
+        "product_catalog",
+        "deployment_capacity",
+        "evaluation_criteria"
+      ],
+      "group_counts": {
+        "market_research": 0,
+        "competitor_data": 0,
+        "customer_feedback": 0,
+        "product_catalog": 0,
+        "deployment_capacity": 0,
+        "evaluation_criteria": 0
+      },
+      "ready_details": [],
+      "missing_details": [
+        {
+          "id": "market_research",
+          "name": "MARKET RESEARCH",
+          "title": "Báo cáo nghiên cứu thị trường của 4 địa bàn"
+        },
+        {
+          "id": "competitor_data",
+          "name": "COMPETITOR DATA",
+          "title": "Hồ sơ đối thủ cạnh tranh"
+        },
+        {
+          "id": "customer_feedback",
+          "name": "CUSTOMER FEEDBACK",
+          "title": "Phản hồi khách hàng"
+        },
+        {
+          "id": "product_catalog",
+          "name": "PRODUCT CATALOG",
+          "title": "Danh mục giải pháp quản lý kho"
+        },
+        {
+          "id": "deployment_capacity",
+          "name": "DEPLOYMENT CAPACITY",
+          "title": "Năng lực nhân sự và triển khai"
+        },
+        {
+          "id": "evaluation_criteria",
+          "name": "EVALUATION CRITERIA",
+          "title": "Bộ tiêu chí đánh giá địa bàn"
+        }
+      ]
+    }
+  }
+]
