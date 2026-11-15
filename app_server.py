@@ -225,6 +225,12 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
 
+        # Chuẩn hóa đường dẫn: Loại bỏ tiền tố /web nếu Vercel rewrite đưa vào
+        if path.startswith("/web/"):
+            path = path[4:]
+        elif path == "/web":
+            path = "/"
+
         if path == "/" or path == "/index.html":
             index_path = os.path.join(WEB_DIR, "index.html")
             try:
@@ -271,11 +277,15 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         elif path == "/api/step5/download-report":
             self._handle_download_step5_report()
         else:
+            self.path = path
             return super().do_GET()
 
     def do_POST(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
+
+        if path.startswith("/web/"):
+            path = path[4:]
 
         if path == "/api/run":
             self._handle_run_pipeline()
