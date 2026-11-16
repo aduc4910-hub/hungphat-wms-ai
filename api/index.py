@@ -12,13 +12,17 @@ for search_dir in [PARENT_ROOT_DIR, CURRENT_FILE_DIR, "/var/task", "/var/task/ap
         sys.path.insert(0, search_dir)
 
 # 2. Khởi tạo app_server hoặc Fallback Handler để bảo đảm không bao giờ sập container
+STARTUP_ERROR = None
+STARTUP_TRACEBACK = None
+
 try:
     import app_server
     app_server.init_storage()
     BaseHandler = app_server.AgentWebHandler
-except Exception as startup_err:
-    trace_err = traceback.format_exc()
-    print(f"[VERCEL_STARTUP_EXCEPTION] {trace_err}")
+except Exception as err:
+    STARTUP_ERROR = str(err)
+    STARTUP_TRACEBACK = traceback.format_exc()
+    print(f"[VERCEL_STARTUP_EXCEPTION] {STARTUP_TRACEBACK}")
 
     from http.server import BaseHTTPRequestHandler
     class FallbackHandler(BaseHTTPRequestHandler):
@@ -33,8 +37,8 @@ except Exception as startup_err:
             body = json.dumps({
                 "success": False,
                 "error": "SERVER_STARTUP_ERROR",
-                "message": f"Không thể tải module backend: {str(startup_err)}",
-                "traceback": trace_err,
+                "message": f"Không thể tải module backend: {STARTUP_ERROR or 'Khởi tạo không thành công'}",
+                "traceback": STARTUP_TRACEBACK or "",
                 "sys_path": sys.path,
                 "cwd": os.getcwd(),
                 "cwd_files": os.listdir(os.getcwd()) if os.path.exists(os.getcwd()) else []
