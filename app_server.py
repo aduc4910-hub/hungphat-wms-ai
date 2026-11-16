@@ -19,6 +19,7 @@ import datetime
 import uuid
 import mimetypes
 import re
+import shutil
 
 # Đảm bảo import được module src
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -29,8 +30,21 @@ from src.agent_coordinator import HungPhatMasterAgent
 PORT = 8088
 WEB_DIR = os.path.join(BASE_DIR, "public") if os.path.exists(os.path.join(BASE_DIR, "public")) else os.path.join(BASE_DIR, "web")
 
-# Môi trường lưu trữ: Nếu chạy trên Vercel hoặc Cloud Serverless (Read-only filesystem), sử dụng /tmp
-IS_VERCEL = (os.environ.get('VERCEL') == '1' or os.environ.get('AWS_LAMBDA_FUNCTION_NAME') is not None)
+# Môi trường lưu trữ: Tự động phát hiện Vercel hoặc Serverless Read-only Filesystem để dùng /tmp
+def _detect_serverless():
+    if any(k in os.environ for k in ['VERCEL', 'VERCEL_ENV', 'AWS_LAMBDA_FUNCTION_NAME', 'LAMBDA_TASK_ROOT']):
+        return True
+    try:
+        probe = os.path.join(BASE_DIR, ".write_probe")
+        with open(probe, "w") as f:
+            f.write("probe")
+        if os.path.exists(probe):
+            os.remove(probe)
+        return False
+    except (OSError, PermissionError):
+        return True
+
+IS_VERCEL = _detect_serverless()
 STORAGE_DIR = '/tmp' if IS_VERCEL else BASE_DIR
 
 DATA_DIR = os.path.join(STORAGE_DIR, "data")
@@ -121,29 +135,37 @@ DATA_GROUPS = [
 
 def init_storage():
     """Khởi tạo cấu trúc lưu trữ và các file trạng thái nếu chưa tồn tại"""
-    os.makedirs(DATA_DIR, exist_ok=True)
-    os.makedirs(UPLOADS_DIR, exist_ok=True)
-    os.makedirs(OUTPUTS_DIR, exist_ok=True)
+    try:
+        os.makedirs(DATA_DIR, exist_ok=True)
+        os.makedirs(UPLOADS_DIR, exist_ok=True)
+        os.makedirs(OUTPUTS_DIR, exist_ok=True)
+    except Exception:
+        pass
 
-    # Nếu chạy trên Vercel, sao chép các bộ dữ liệu mẫu ban đầu sang /tmp/data
-    if IS_VERCEL:
+    # Nếu chạy trên Vercel hoặc /tmp, sao chép các bộ dữ liệu mẫu ban đầu sang /tmp/data
+    if IS_VERCEL or STORAGE_DIR == '/tmp':
         bundled_data_dir = os.path.join(BASE_DIR, "data")
         if os.path.exists(bundled_data_dir):
-            for item in os.listdir(bundled_data_dir):
-                s = os.path.join(bundled_data_dir, item)
-                d = os.path.join(DATA_DIR, item)
-                if not os.path.exists(d) and os.path.isfile(s):
-                    try:
-                        shutil.copy2(s, d)
-                    except Exception:
-                        pass
+            try:
+                for item in os.listdir(bundled_data_dir):
+                    s = os.path.join(bundled_data_dir, item)
+                    d = os.path.join(DATA_DIR, item)
+                    if not os.path.exists(d) and os.path.isfile(s):
+                        try:
+                            shutil.copy2(s, d)
+                        except Exception:
+                            pass
+            except Exception:
+                pass
 
     for grp in DATA_GROUPS:
-        os.makedirs(os.path.join(UPLOADS_DIR, grp["id"]), exist_ok=True)
+        try:
+            os.makedirs(os.path.join(UPLOADS_DIR, grp["id"]), exist_ok=True)
+        except Exception:
+            pass
 
     if not os.path.exists(INVENTORY_FILE):
-        with open(INVENTORY_FILE, "w", encoding="utf-8") as f:
-            json.dump([], f, ensure_ascii=False, indent=2)
+        save_json(INVENTORY_FILE, [])
 
     if not os.path.exists(STATUS_FILE):
         default_status = {
@@ -155,27 +177,66 @@ def init_storage():
             "missing_groups": [g["id"] for g in DATA_GROUPS],
             "group_counts": {g["id"]: 0 for g in DATA_GROUPS}
         }
-        with open(STATUS_FILE, "w", encoding="utf-8") as f:
-            json.dump(default_status, f, ensure_ascii=False, indent=2)
+        save_json(STATUS_FILE, default_status)
 
     if not os.path.exists(AUDIT_LOG_FILE):
-        with open(AUDIT_LOG_FILE, "w", encoding="utf-8") as f:
-            json.dump([], f, ensure_ascii=False, indent=2)
-
-init_storage()
+        save_json(AUDIT_LOG_FILE, [])
 
 def load_json(filepath, default=None):
-    if not os.path.exists(filepath):
-        return default if default is not None else {}
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return default if default is not None else {}
+    if os.path.exists(filepath):
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    # Fallback kiểm tra trong /tmp/data
+    tmp_path = os.path.join("/tmp", "data", os.path.basename(filepath))
+    if tmp_path != filepath and os.path.exists(tmp_path):
+        try:
+            with open(tmp_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    # Fallback kiểm tra trong data gốc dự án
+    repo_path = os.path.join(BASE_DIR, "data", os.path.basename(filepath))
+    if repo_path != filepath and os.path.exists(repo_path):
+        try:
+            with open(repo_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return default if default is not None else {}
 
 def save_json(filepath, data):
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except (OSError, PermissionError):
+        # Fallback an toàn sang /tmp nếu hệ thống file là read-only (Vercel Serverless)
+        tmp_target = os.path.join("/tmp", "data", os.path.basename(filepath))
+        try:
+            os.makedirs(os.path.dirname(tmp_target), exist_ok=True)
+            with open(tmp_target, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+
+def save_text_file(filepath, content):
+    try:
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(content)
+    except (OSError, PermissionError):
+        tmp_target = os.path.join("/tmp", "outputs", os.path.basename(filepath))
+        try:
+            os.makedirs(os.path.dirname(tmp_target), exist_ok=True)
+            with open(tmp_target, "w", encoding="utf-8") as f:
+                f.write(content)
+        except Exception:
+            pass
+
+init_storage()
 
 def log_data_audit(action, message, details=None):
     logs = load_json(AUDIT_LOG_FILE, default=[])
@@ -221,15 +282,67 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             kwargs['directory'] = WEB_DIR
         super().__init__(*args, **kwargs)
 
-    def do_GET(self):
+    def _resolve_api_path(self):
+        """
+        Phân giải chính xác đường dẫn endpoint ngay cả khi chạy trên Vercel Serverless Function qua rewrites
+        """
+        # 1. Kiểm tra query param __path__ được forward từ vercel.json
         parsed = urllib.parse.urlparse(self.path)
-        path = parsed.path
+        qs = urllib.parse.parse_qs(parsed.query)
+        if "__path__" in qs and qs["__path__"]:
+            candidate = qs["__path__"][0]
+            if candidate and candidate not in ("/api/index.py", "/api/index"):
+                return candidate if candidate.startswith("/") else ("/" + candidate)
 
-        # Chuẩn hóa đường dẫn: Loại bỏ tiền tố /web nếu Vercel rewrite đưa vào
-        if path.startswith("/web/"):
-            path = path[4:]
-        elif path == "/web":
-            path = "/"
+        # 2. Kiểm tra header chuẩn do Vercel Edge Proxy cung cấp
+        for h in ("x-matched-path", "x-forwarded-uri", "x-original-uri", "x-now-route-matches"):
+            val = self.headers.get(h)
+            if val:
+                val_path = urllib.parse.urlparse(val).path
+                if val_path and val_path not in ("/api/index.py", "/api/index", "/api/index.py/"):
+                    return val_path
+
+        # 3. Trả về path từ self.path sau khi chuẩn hóa
+        raw_path = parsed.path
+        if raw_path.startswith("/web/"):
+            raw_path = raw_path[4:]
+        elif raw_path == "/web":
+            raw_path = "/"
+        return raw_path
+
+    def send_error(self, code, message=None, explain=None):
+        clean_path = getattr(self, "_current_clean_path", "") or self.path or ""
+        if "/api" in clean_path or self.path.startswith("/api"):
+            err_msg = message or "Lỗi xử lý yêu cầu API"
+            if explain:
+                err_msg = f"{err_msg}: {explain}"
+            self._send_json({
+                "success": False,
+                "error": err_msg,
+                "code": code,
+                "path": clean_path
+            }, status=code)
+        else:
+            super().send_error(code, message, explain)
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        self.send_header('Content-Length', '0')
+        self.end_headers()
+
+    def do_GET(self):
+        try:
+            path = self._resolve_api_path()
+            self._current_clean_path = path
+
+            # Chuẩn hóa đường dẫn: Loại bỏ tiền tố /web nếu Vercel rewrite đưa vào
+            if path.startswith("/web/"):
+                path = path[4:]
+            elif path == "/web":
+                path = "/"
 
         if path == "/" or path == "/index.html":
             index_path = os.path.join(WEB_DIR, "index.html")
@@ -248,6 +361,13 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             except Exception as e:
                 self.send_error(500, f"Error reading index.html: {str(e)}")
                 return
+        elif path in ("/api", "/api/", "/api/index.py", "/api/index"):
+            self._send_json({
+                "service": "Hưng Phát Smart Warehouse AI Agent API",
+                "status": "online",
+                "version": "2.0.0"
+            })
+            return
         elif path == "/api/datasets":
             self._handle_get_datasets()
         elif path == "/api/data-groups":
@@ -279,44 +399,58 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         else:
             self.path = path
             return super().do_GET()
+        except Exception as e:
+            if "/api" in getattr(self, '_current_clean_path', self.path):
+                self._send_json({
+                    "success": False,
+                    "error": f"Lỗi xử lý GET: {str(e)}"
+                }, status=500)
+            else:
+                self.send_error(500, f"Lỗi máy chủ: {str(e)}")
 
     def do_POST(self):
-        parsed = urllib.parse.urlparse(self.path)
-        path = parsed.path
+        try:
+            path = self._resolve_api_path()
+            self._current_clean_path = path
 
-        if path.startswith("/web/"):
-            path = path[4:]
+            if path.startswith("/web/"):
+                path = path[4:]
 
-        if path == "/api/run":
-            self._handle_run_pipeline()
-        elif path == "/api/upload":
-            self._handle_upload_file()
-        elif path == "/api/delete-document":
-            self._handle_delete_document()
-        elif path == "/api/delete-latest-document":
-            self._handle_delete_latest_document()
-        elif path == "/api/clear-all-documents":
-            self._handle_clear_all_documents()
-        elif path == "/api/confirm-input":
-            self._handle_confirm_input()
-        elif path == "/api/step2/validate":
-            self._handle_step2_validate()
-        elif path == "/api/step2/resolve":
-            self._handle_step2_resolve()
-        elif path == "/api/step3/analyze":
-            self._handle_step3_analyze()
-        elif path == "/api/step3/confirm":
-            self._handle_step3_confirm()
-        elif path == "/api/step4/assess":
-            self._handle_step4_assess()
-        elif path == "/api/step4/confirm":
-            self._handle_step4_confirm()
-        elif path == "/api/step5/evaluate":
-            self._handle_step5_evaluate()
-        elif path == "/api/step5/confirm":
-            self._handle_step5_confirm()
-        else:
-            self.send_error(404, "Endpoint not found")
+            if path == "/api/run":
+                self._handle_run_pipeline()
+            elif path == "/api/upload":
+                self._handle_upload_file()
+            elif path == "/api/delete-document":
+                self._handle_delete_document()
+            elif path == "/api/delete-latest-document":
+                self._handle_delete_latest_document()
+            elif path == "/api/clear-all-documents":
+                self._handle_clear_all_documents()
+            elif path == "/api/confirm-input":
+                self._handle_confirm_input()
+            elif path == "/api/step2/validate":
+                self._handle_step2_validate()
+            elif path == "/api/step2/resolve":
+                self._handle_step2_resolve()
+            elif path == "/api/step3/analyze":
+                self._handle_step3_analyze()
+            elif path == "/api/step3/confirm":
+                self._handle_step3_confirm()
+            elif path == "/api/step4/assess":
+                self._handle_step4_assess()
+            elif path == "/api/step4/confirm":
+                self._handle_step4_confirm()
+            elif path == "/api/step5/evaluate":
+                self._handle_step5_evaluate()
+            elif path == "/api/step5/confirm":
+                self._handle_step5_confirm()
+            else:
+                self.send_error(404, f"API endpoint '{path}' không tồn tại")
+        except Exception as e:
+            self._send_json({
+                "success": False,
+                "error": f"Lỗi nội bộ máy chủ khi xử lý POST {getattr(self, '_current_clean_path', self.path)}: {str(e)}"
+            }, status=500)
 
     def _handle_get_datasets(self):
         datasets = [
@@ -392,7 +526,11 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             # 🌟 XỬ LÝ NẠP CẤP TỐC 1 FILE TỔNG HỢP (ALL-IN-ONE) -> TỰ ĐỘNG BÓC TÁCH 6 NHÓM:
             if raw_category in ["all_in_one", "all_in_one_master", "all"]:
                 master_dir = os.path.join(UPLOADS_DIR, "all_in_one")
-                os.makedirs(master_dir, exist_ok=True)
+                try:
+                    os.makedirs(master_dir, exist_ok=True)
+                except Exception:
+                    master_dir = os.path.join("/tmp", "uploads", "all_in_one")
+                    os.makedirs(master_dir, exist_ok=True)
                 storage_filename = f"{timestamp_str}_MASTER_{safe_name}"
                 target_filepath = os.path.join(master_dir, storage_filename)
 
@@ -403,8 +541,11 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                     actual_file_size = len(file_bytes)
                 except Exception:
                     actual_file_size = item.get("file_size", 0)
-                    with open(target_filepath, "w", encoding="utf-8") as f:
-                        f.write(f"Tài liệu Tổng Hợp Master: {doc_name}\nNguồn: {source}\nNgày: {collected_date}\nBao gồm đầy đủ 6 nhóm dữ liệu.")
+                    try:
+                        with open(target_filepath, "w", encoding="utf-8") as f:
+                            f.write(f"Tài liệu Tổng Hợp Master: {doc_name}\nNguồn: {source}\nNgày: {collected_date}\nBao gồm đầy đủ 6 nhóm dữ liệu.")
+                    except Exception:
+                        pass
 
                 sub_titles = {
                     "market_research": "Phân Hệ 1: Nghiên cứu Quy mô & Đặc điểm Thị trường 4 Địa bàn",
@@ -457,7 +598,11 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                 category = raw_category if raw_category in valid_group_ids else "market_research"
                 storage_filename = f"{timestamp_str}_{safe_name}"
                 target_dir = os.path.join(UPLOADS_DIR, category)
-                os.makedirs(target_dir, exist_ok=True)
+                try:
+                    os.makedirs(target_dir, exist_ok=True)
+                except Exception:
+                    target_dir = os.path.join("/tmp", "uploads", category)
+                    os.makedirs(target_dir, exist_ok=True)
                 target_filepath = os.path.join(target_dir, storage_filename)
 
                 try:
@@ -467,8 +612,11 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                     actual_file_size = len(file_bytes)
                 except Exception:
                     actual_file_size = item.get("file_size", 0)
-                    with open(target_filepath, "w", encoding="utf-8") as f:
-                        f.write(f"Tài liệu tiếp nhận: {doc_name}\nNguồn: {source}\nNgày: {collected_date}")
+                    try:
+                        with open(target_filepath, "w", encoding="utf-8") as f:
+                            f.write(f"Tài liệu tiếp nhận: {doc_name}\nNguồn: {source}\nNgày: {collected_date}")
+                    except Exception:
+                        pass
 
                 doc_entry = {
                     "id": f"DOC_{uuid.uuid4().hex[:8].upper()}",
@@ -844,76 +992,82 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(500, f"Lỗi đọc file: {str(e)}")
 
     def _handle_confirm_input(self):
-        docs = load_json(INVENTORY_FILE, default=[])
+        try:
+            docs = load_json(INVENTORY_FILE, default=[])
 
-        group_counts = {g["id"]: 0 for g in DATA_GROUPS}
-        for d in docs:
-            cat = d.get("category")
-            if cat in group_counts:
-                group_counts[cat] += 1
+            group_counts = {g["id"]: 0 for g in DATA_GROUPS}
+            for d in docs:
+                cat = d.get("category")
+                if cat in group_counts:
+                    group_counts[cat] += 1
 
-        ready_groups = [g for g in DATA_GROUPS if group_counts[g["id"]] > 0]
-        missing_groups = [g for g in DATA_GROUPS if group_counts[g["id"]] == 0]
-        is_complete = (len(missing_groups) == 0)
+            ready_groups = [g for g in DATA_GROUPS if group_counts[g["id"]] > 0]
+            missing_groups = [g for g in DATA_GROUPS if group_counts[g["id"]] == 0]
+            is_complete = (len(missing_groups) == 0 and len(docs) > 0)
 
-        confirmed_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            confirmed_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        status_record = {
-            "confirmed_at": confirmed_time,
-            "is_confirmed": True,
-            "is_complete": is_complete,
-            "total_documents": len(docs),
-            "ready_groups": [g["id"] for g in ready_groups],
-            "missing_groups": [g["id"] for g in missing_groups],
-            "group_counts": group_counts,
-            "ready_details": [
-                {
-                    "id": g["id"],
-                    "code": g.get("code", ""),
-                    "name": g["name"],
-                    "title": g["title"],
-                    "icon": g.get("icon", "📄"),
-                    "count": group_counts[g["id"]]
+            status_record = {
+                "confirmed_at": confirmed_time,
+                "is_confirmed": True,
+                "is_complete": is_complete,
+                "total_documents": len(docs),
+                "ready_groups": [g["id"] for g in ready_groups],
+                "missing_groups": [g["id"] for g in missing_groups],
+                "group_counts": group_counts,
+                "ready_details": [
+                    {
+                        "id": g["id"],
+                        "code": g.get("code", ""),
+                        "name": g["name"],
+                        "title": g["title"],
+                        "icon": g.get("icon", "📄"),
+                        "count": group_counts[g["id"]]
+                    }
+                    for g in ready_groups
+                ],
+                "missing_details": [
+                    {
+                        "id": g["id"],
+                        "code": g.get("code", ""),
+                        "name": g["name"],
+                        "title": g["title"],
+                        "icon": g.get("icon", "⚠️"),
+                        "severity": g.get("severity", "HIGH"),
+                        "risk_title": g.get("risk_title", ""),
+                        "risk_if_missing": g.get("risk_if_missing", "")
+                    }
+                    for g in missing_groups
+                ],
+                "risk_summary": {
+                    "has_critical": any(g.get("severity") == "CRITICAL" for g in missing_groups),
+                    "critical_count": sum(1 for g in missing_groups if g.get("severity") == "CRITICAL"),
+                    "high_count": sum(1 for g in missing_groups if g.get("severity") == "HIGH"),
+                    "total_missing": len(missing_groups),
+                    "status_flag": "COMPLETE_VERIFIED" if is_complete else ("CRITICAL_MISSING_RISK" if any(g.get("severity") == "CRITICAL" for g in missing_groups) else "WARNING_INCOMPLETE_RISK")
                 }
-                for g in ready_groups
-            ],
-            "missing_details": [
-                {
-                    "id": g["id"],
-                    "code": g.get("code", ""),
-                    "name": g["name"],
-                    "title": g["title"],
-                    "icon": g.get("icon", "⚠️"),
-                    "severity": g.get("severity", "HIGH"),
-                    "risk_title": g.get("risk_title", ""),
-                    "risk_if_missing": g.get("risk_if_missing", "")
-                }
-                for g in missing_groups
-            ],
-            "risk_summary": {
-                "has_critical": any(g.get("severity") == "CRITICAL" for g in missing_groups),
-                "critical_count": sum(1 for g in missing_groups if g.get("severity") == "CRITICAL"),
-                "high_count": sum(1 for g in missing_groups if g.get("severity") == "HIGH"),
-                "total_missing": len(missing_groups),
-                "status_flag": "COMPLETE_VERIFIED" if is_complete else ("CRITICAL_MISSING_RISK" if any(g.get("severity") == "CRITICAL" for g in missing_groups) else "WARNING_INCOMPLETE_RISK")
             }
-        }
 
-        save_json(STATUS_FILE, status_record)
+            save_json(STATUS_FILE, status_record)
 
-        audit_msg = (
-            f"Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: {len(ready_groups)}/6 nhóm đã nạp, "
-            f"{len(missing_groups)}/6 nhóm còn thiếu (Gồm {status_record['risk_summary']['critical_count']} rủi ro NGUY CẤP, "
-            f"{status_record['risk_summary']['high_count']} rủi ro CAO). Tổng số: {len(docs)} tài liệu. "
-            f"Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích."
-        )
-        log_data_audit("CONFIRM_DATA_INPUT", audit_msg, status_record)
+            audit_msg = (
+                f"Người dùng nhấn [CONFIRM DATA INPUT]. Kết quả kiểm tra: {len(ready_groups)}/6 nhóm đã nạp, "
+                f"{len(missing_groups)}/6 nhóm còn thiếu (Gồm {status_record['risk_summary']['critical_count']} rủi ro NGUY CẤP, "
+                f"{status_record['risk_summary']['high_count']} rủi ro CAO). Tổng số: {len(docs)} tài liệu. "
+                f"Trạng thái đã được ghi nhận. Không tự động kích hoạt phân tích."
+            )
+            log_data_audit("CONFIRM_DATA_INPUT", audit_msg, status_record)
 
-        self._send_json({
-            "success": True,
-            "status": status_record,
-            "message": "Đã xác nhận và lưu trữ trạng thái tiếp nhận dữ liệu Bước 1 thành công."
-        })
+            self._send_json({
+                "success": True,
+                "status": status_record,
+                "message": "Đã xác nhận và lưu trữ trạng thái tiếp nhận dữ liệu Bước 1 thành công."
+            })
+        except Exception as e:
+            self._send_json({
+                "success": False,
+                "error": f"Lỗi xác nhận dữ liệu: {str(e)}"
+            }, status=500)
 
     # ==============================================================
     # BƯỚC 2: KIỂM ĐỊNH & LÀM SẠCH DỮ LIỆU (STEP 02 ENDPOINTS)
@@ -1235,11 +1389,16 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         self._send_json(res)
 
     def _handle_download_step3_report(self):
-        if not os.path.exists(STEP3_REPORT_MD):
-            self.send_error(404, "Chưa có file market_analysis_report.md. Vui lòng chạy phân tích Bước 3.")
-            return
+        target = STEP3_REPORT_MD
+        if not os.path.exists(target):
+            tmp_target = os.path.join("/tmp", "outputs", os.path.basename(STEP3_REPORT_MD))
+            if os.path.exists(tmp_target):
+                target = tmp_target
+            else:
+                self.send_error(404, "Chưa có file market_analysis_report.md. Vui lòng chạy phân tích Bước 3.")
+                return
 
-        with open(STEP3_REPORT_MD, "rb") as f:
+        with open(target, "rb") as f:
             data = f.read()
 
         self.send_response(200)
@@ -1593,8 +1752,7 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                 md.append(f"- `{ev['badge']}`: {ev['claim']}")
             md.append("")
 
-        with open(STEP3_REPORT_MD, "w", encoding="utf-8") as f:
-            f.write("\n".join(md))
+        save_text_file(STEP3_REPORT_MD, "\n".join(md))
 
     # =========================================================================
     # STEP 04: DEPLOYMENT ASSESSMENT HANDLERS & ENGINE
@@ -1610,11 +1768,16 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         self._send_json(res)
 
     def _handle_download_step4_report(self):
-        if not os.path.exists(STEP4_REPORT_MD):
-            self.send_error(404, "Chưa có file deployment_assessment_report.md. Vui lòng chạy đánh giá Bước 4.")
-            return
+        target = STEP4_REPORT_MD
+        if not os.path.exists(target):
+            tmp_target = os.path.join("/tmp", "outputs", os.path.basename(STEP4_REPORT_MD))
+            if os.path.exists(tmp_target):
+                target = tmp_target
+            else:
+                self.send_error(404, "Chưa có file deployment_assessment_report.md. Vui lòng chạy đánh giá Bước 4.")
+                return
 
-        with open(STEP4_REPORT_MD, "rb") as f:
+        with open(target, "rb") as f:
             data = f.read()
 
         self.send_response(200)
@@ -2048,8 +2211,7 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             md.append(f"  + *Tác động:* {rsk['impact']}")
             md.append(f"  + *Biện pháp giảm thiểu:* {rsk['mitigation']}")
 
-        with open(STEP4_REPORT_MD, "w", encoding="utf-8") as f:
-            f.write("\n".join(md))
+        save_text_file(STEP4_REPORT_MD, "\n".join(md))
 
     # =========================================================================
     # STEP 05: LOCATION EVALUATION HANDLERS & MCDA ENGINE
@@ -2065,11 +2227,16 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         self._send_json(res)
 
     def _handle_download_step5_report(self):
-        if not os.path.exists(STEP5_REPORT_MD):
-            self.send_error(404, "Chưa có file location_evaluation_report.md. Vui lòng chạy đánh giá Bước 5.")
-            return
+        target = STEP5_REPORT_MD
+        if not os.path.exists(target):
+            tmp_target = os.path.join("/tmp", "outputs", os.path.basename(STEP5_REPORT_MD))
+            if os.path.exists(tmp_target):
+                target = tmp_target
+            else:
+                self.send_error(404, "Chưa có file location_evaluation_report.md. Vui lòng chạy đánh giá Bước 5.")
+                return
 
-        with open(STEP5_REPORT_MD, "rb") as f:
+        with open(target, "rb") as f:
             data = f.read()
 
         self.send_response(200)
@@ -2514,8 +2681,7 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         md.append(f"\n---\n**Cảnh báo chất lượng dữ liệu:** {rec.get('data_quality_alert')}\n")
         md.append(f"> *{rec.get('decision_disclaimer')}*")
 
-        with open(STEP5_REPORT_MD, "w", encoding="utf-8") as f:
-            f.write("\n".join(md))
+        save_text_file(STEP5_REPORT_MD, "\n".join(md))
 
 
 
@@ -2601,14 +2767,19 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
 
         self._send_json(response_payload)
 
-    def _send_json(self, data):
-        body = json.dumps(data, ensure_ascii=False).encode('utf-8')
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json; charset=utf-8')
-        self.send_header('Content-Length', str(len(body)))
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        self.wfile.write(body)
+    def _send_json(self, data, status=200):
+        try:
+            body = json.dumps(data, ensure_ascii=False).encode('utf-8')
+            self.send_response(status)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Content-Length', str(len(body)))
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+            self.end_headers()
+            self.wfile.write(body)
+        except Exception as e:
+            print(f"[ERR] _send_json error: {e}")
 
 class ThreadedHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
     daemon_threads = True

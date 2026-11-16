@@ -5701,7 +5701,15 @@
     async function loadDataInventory() {
       try {
         const res = await fetch('/api/data-inventory');
-        const data = await res.json();
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          console.warn('data-inventory non-JSON:', text.substring(0, 80));
+          return;
+        }
+        if (!data || !data.groups) return;
         currentInventory = data.documents || [];
         currentDataGroups = data.groups || [];
         
@@ -6360,7 +6368,14 @@
 
       try {
         const res = await fetch('/api/confirm-input', { method: 'POST' });
-        const data = await res.json();
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (jsonErr) {
+          throw new Error('Máy chủ phản hồi không đúng chuẩn JSON (Mã HTTP: ' + res.status + ').');
+        }
+
         if (data.success) {
           window.isStep1ReportExpanded = false; // Always collapsed by default per user request
           renderConfirmationResult(data.status);
@@ -6370,6 +6385,8 @@
 
           const box = document.getElementById('dc-confirm-result-box');
           if (box) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          alert('Không thể xác nhận dữ liệu: ' + (data.error || data.message || 'Lỗi không xác định'));
         }
       } catch (err) {
         alert('Lỗi xác nhận dữ liệu: ' + err.message);
@@ -6703,11 +6720,13 @@
 
     function refreshDataLogs() {
       fetch('/api/data-logs')
-        .then(r => r.json())
-        .then(data => {
+        .then(r => r.text())
+        .then(text => {
+          let data;
+          try { data = JSON.parse(text); } catch (e) { return; }
           const container = document.getElementById('dc-activity-logs-container');
           if (!container) return;
-          if (!data.logs || data.logs.length === 0) {
+          if (!data || !data.logs || data.logs.length === 0) {
             container.innerText = '// Chưa có nhật ký thao tác tiếp nhận nào.';
             return;
           }
