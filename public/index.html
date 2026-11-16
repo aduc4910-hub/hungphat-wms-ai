@@ -5990,7 +5990,13 @@
           body: JSON.stringify({ documents: payloadDocs })
         });
 
-        const result = await res.json();
+        const resText = await res.text();
+        let result;
+        try {
+          result = JSON.parse(resText);
+        } catch (jsonErr) {
+          throw new Error('Máy chủ phản hồi không đúng chuẩn JSON (Mã HTTP ' + res.status + '): ' + (resText ? resText.substring(0, 150) : 'Rỗng'));
+        }
         if (result.success) {
           showToast('⚡ AI đã bóc tách file tổng hợp thành công: Đầy đủ 6/6 nhóm dữ liệu!', 'success');
           await loadDataInventory();
@@ -6119,7 +6125,13 @@
           body: JSON.stringify({ documents: payloadDocs })
         });
 
-        const result = await res.json();
+        const resText = await res.text();
+        let result;
+        try {
+          result = JSON.parse(resText);
+        } catch (jsonErr) {
+          throw new Error('Máy chủ phản hồi không đúng chuẩn JSON (Mã HTTP ' + res.status + '): ' + (resText ? resText.substring(0, 150) : 'Rỗng'));
+        }
         if (result.success) {
           const msg = (category === 'all_in_one')
             ? '⚡ AI đã tiếp nhận file tổng hợp & bóc tách thành công đủ 6/6 nhóm nghiệp vụ!'

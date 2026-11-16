@@ -25,7 +25,8 @@ import shutil
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 
-from src.agent_coordinator import HungPhatMasterAgent
+# Lazy import HungPhatMasterAgent trong _handle_run_pipeline để tăng tốc cold start trên Serverless
+HungPhatMasterAgent = None
 
 PORT = 8088
 WEB_DIR = os.path.join(BASE_DIR, "public") if os.path.exists(os.path.join(BASE_DIR, "public")) else os.path.join(BASE_DIR, "web")
@@ -279,7 +280,7 @@ def reset_pipeline_steps():
 class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         if 'directory' not in kwargs:
-            kwargs['directory'] = WEB_DIR
+            kwargs['directory'] = WEB_DIR if os.path.exists(WEB_DIR) else os.getcwd()
         super().__init__(*args, **kwargs)
 
     def _resolve_api_path(self):
@@ -292,7 +293,8 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         if "__path__" in qs and qs["__path__"]:
             candidate = qs["__path__"][0]
             if candidate and candidate not in ("/api/index.py", "/api/index"):
-                return candidate if candidate.startswith("/") else ("/" + candidate)
+                candidate_path = urllib.parse.urlparse(candidate).path
+                return candidate_path if candidate_path.startswith("/") else ("/" + candidate_path)
 
         # 2. Kiểm tra header chuẩn do Vercel Edge Proxy cung cấp
         for h in ("x-matched-path", "x-forwarded-uri", "x-original-uri", "x-now-route-matches"):
@@ -344,61 +346,63 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             elif path == "/web":
                 path = "/"
 
-        if path == "/" or path == "/index.html":
-            index_path = os.path.join(WEB_DIR, "index.html")
-            try:
-                with open(index_path, "rb") as f:
-                    content = f.read()
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/html; charset=utf-8')
-                self.send_header('Content-Length', str(len(content)))
-                self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-                self.send_header('Pragma', 'no-cache')
-                self.send_header('Expires', '0')
-                self.end_headers()
-                self.wfile.write(content)
+            if path == "/" or path == "/index.html":
+                index_path = os.path.join(WEB_DIR, "index.html")
+                try:
+                    with open(index_path, "rb") as f:
+                        content = f.read()
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/html; charset=utf-8')
+                    self.send_header('Content-Length', str(len(content)))
+                    self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+                    self.send_header('Pragma', 'no-cache')
+                    self.send_header('Expires', '0')
+                    self.end_headers()
+                    self.wfile.write(content)
+                    return
+                except Exception as e:
+                    self.send_error(500, f"Error reading index.html: {str(e)}")
+                    return
+            elif path in ("/api", "/api/", "/api/index.py", "/api/index"):
+                self._send_json({
+                    "service": "Hưng Phát Smart Warehouse AI Agent API",
+                    "status": "online",
+                    "version": "2.0.0"
+                })
                 return
-            except Exception as e:
-                self.send_error(500, f"Error reading index.html: {str(e)}")
-                return
-        elif path in ("/api", "/api/", "/api/index.py", "/api/index"):
-            self._send_json({
-                "service": "Hưng Phát Smart Warehouse AI Agent API",
-                "status": "online",
-                "version": "2.0.0"
-            })
-            return
-        elif path == "/api/datasets":
-            self._handle_get_datasets()
-        elif path == "/api/data-groups":
-            self._handle_get_data_groups()
-        elif path == "/api/data-inventory":
-            self._handle_get_data_inventory()
-        elif path == "/api/data-logs":
-            self._handle_get_data_logs()
-        elif path == "/api/download":
-            self._handle_download_file(parsed, as_attachment=True)
-        elif path == "/api/view":
-            self._handle_download_file(parsed, as_attachment=False)
-        elif path == "/api/step2/status":
-            self._handle_get_step2_status()
-        elif path == "/api/step2/download-cleaned":
-            self._handle_download_cleaned_dataset()
-        elif path == "/api/step3/status":
-            self._handle_get_step3_status()
-        elif path == "/api/step3/download-report":
-            self._handle_download_step3_report()
-        elif path == "/api/step4/status":
-            self._handle_get_step4_status()
-        elif path == "/api/step4/download-report":
-            self._handle_download_step4_report()
-        elif path == "/api/step5/status":
-            self._handle_get_step5_status()
-        elif path == "/api/step5/download-report":
-            self._handle_download_step5_report()
-        else:
-            self.path = path
-            return super().do_GET()
+            elif path == "/api/datasets":
+                self._handle_get_datasets()
+            elif path == "/api/data-groups":
+                self._handle_get_data_groups()
+            elif path == "/api/data-inventory":
+                self._handle_get_data_inventory()
+            elif path == "/api/data-logs":
+                self._handle_get_data_logs()
+            elif path == "/api/download":
+                parsed = urllib.parse.urlparse(self.path)
+                self._handle_download_file(parsed, as_attachment=True)
+            elif path == "/api/view":
+                parsed = urllib.parse.urlparse(self.path)
+                self._handle_download_file(parsed, as_attachment=False)
+            elif path == "/api/step2/status":
+                self._handle_get_step2_status()
+            elif path == "/api/step2/download-cleaned":
+                self._handle_download_cleaned_dataset()
+            elif path == "/api/step3/status":
+                self._handle_get_step3_status()
+            elif path == "/api/step3/download-report":
+                self._handle_download_step3_report()
+            elif path == "/api/step4/status":
+                self._handle_get_step4_status()
+            elif path == "/api/step4/download-report":
+                self._handle_download_step4_report()
+            elif path == "/api/step5/status":
+                self._handle_get_step5_status()
+            elif path == "/api/step5/download-report":
+                self._handle_download_step5_report()
+            else:
+                self.path = path
+                return super().do_GET()
         except Exception as e:
             if "/api" in getattr(self, '_current_clean_path', self.path):
                 self._send_json({
@@ -504,166 +508,166 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(400, f"Dữ liệu JSON không hợp lệ: {str(e)}")
                 return
 
-        items = req.get("documents")
-        if not items:
-            items = [req]
+            items = req.get("documents")
+            if not items:
+                items = [req]
 
-        docs_inventory = load_json(INVENTORY_FILE, default=[])
-        created_docs = []
-        valid_group_ids = {g["id"] for g in DATA_GROUPS}
+            docs_inventory = load_json(INVENTORY_FILE, default=[])
+            created_docs = []
+            valid_group_ids = {g["id"] for g in DATA_GROUPS}
 
-        for item in items:
-            raw_category = item.get("category", "all_in_one")
-            raw_filename = item.get("file_name", "unnamed_document")
-            doc_name = item.get("doc_name") or os.path.splitext(raw_filename)[0]
-            source = item.get("source", "Chưa xác định")
-            collected_date = item.get("collected_date") or datetime.date.today().isoformat()
-            location = item.get("location", "Toàn quốc")
-            file_base64 = item.get("file_base64", "")
+            for item in items:
+                raw_category = item.get("category", "all_in_one")
+                raw_filename = item.get("file_name", "unnamed_document")
+                doc_name = item.get("doc_name") or os.path.splitext(raw_filename)[0]
+                source = item.get("source", "Chưa xác định")
+                collected_date = item.get("collected_date") or datetime.date.today().isoformat()
+                location = item.get("location", "Toàn quốc")
+                file_base64 = item.get("file_base64", "")
 
-            _, ext = os.path.splitext(raw_filename)
-            ext_clean = ext.lower().lstrip(".")
+                _, ext = os.path.splitext(raw_filename)
+                ext_clean = ext.lower().lstrip(".")
 
-            timestamp_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            safe_name = sanitize_filename(raw_filename)
+                timestamp_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                safe_name = sanitize_filename(raw_filename)
 
-            # 🌟 XỬ LÝ NẠP CẤP TỐC 1 FILE TỔNG HỢP (ALL-IN-ONE) -> TỰ ĐỘNG BÓC TÁCH 6 NHÓM:
-            if raw_category in ["all_in_one", "all_in_one_master", "all"]:
-                master_dir = os.path.join(UPLOADS_DIR, "all_in_one")
-                try:
-                    os.makedirs(master_dir, exist_ok=True)
-                except Exception:
-                    master_dir = os.path.join("/tmp", "uploads", "all_in_one")
-                    os.makedirs(master_dir, exist_ok=True)
-                storage_filename = f"{timestamp_str}_MASTER_{safe_name}"
-                target_filepath = os.path.join(master_dir, storage_filename)
-
-                try:
-                    file_bytes = base64.b64decode(file_base64)
-                    with open(target_filepath, "wb") as f:
-                        f.write(file_bytes)
-                    actual_file_size = len(file_bytes)
-                except Exception:
-                    actual_file_size = item.get("file_size", 0)
+                # 🌟 XỬ LÝ NẠP CẤP TỐC 1 FILE TỔNG HỢP (ALL-IN-ONE) -> TỰ ĐỘNG BÓC TÁCH 6 NHÓM:
+                if raw_category in ["all_in_one", "all_in_one_master", "all"]:
+                    master_dir = os.path.join(UPLOADS_DIR, "all_in_one")
                     try:
-                        with open(target_filepath, "w", encoding="utf-8") as f:
-                            f.write(f"Tài liệu Tổng Hợp Master: {doc_name}\nNguồn: {source}\nNgày: {collected_date}\nBao gồm đầy đủ 6 nhóm dữ liệu.")
+                        os.makedirs(master_dir, exist_ok=True)
                     except Exception:
-                        pass
+                        master_dir = os.path.join("/tmp", "uploads", "all_in_one")
+                        os.makedirs(master_dir, exist_ok=True)
+                    storage_filename = f"{timestamp_str}_MASTER_{safe_name}"
+                    target_filepath = os.path.join(master_dir, storage_filename)
 
-                sub_titles = {
-                    "market_research": "Phân Hệ 1: Nghiên cứu Quy mô & Đặc điểm Thị trường 4 Địa bàn",
-                    "competitor_data": "Phân Hệ 2: Hồ sơ Phân tích Đối thủ & Thị phần Bản địa",
-                    "customer_feedback": "Phân Hệ 3: Khảo sát Nhu cầu Khách hàng & Điểm đau Vận hành Kho",
-                    "product_catalog": "Phân Hệ 4: Danh mục Tính năng & Thông số Kỹ thuật Hưng Phát WMS",
-                    "deployment_capacity": "Phân Hệ 5: Báo cáo Năng lực Triển khai, Kỹ thuật & Trạm SLA 10km",
-                    "evaluation_criteria": "Phân Hệ 6: Bộ Tiêu chí, Trọng số & Quy tắc Đánh giá MCDA"
-                }
+                    try:
+                        file_bytes = base64.b64decode(file_base64)
+                        with open(target_filepath, "wb") as f:
+                            f.write(file_bytes)
+                        actual_file_size = len(file_bytes)
+                    except Exception:
+                        actual_file_size = item.get("file_size", 0)
+                        try:
+                            with open(target_filepath, "w", encoding="utf-8") as f:
+                                f.write(f"Tài liệu Tổng Hợp Master: {doc_name}\nNguồn: {source}\nNgày: {collected_date}\nBao gồm đầy đủ 6 nhóm dữ liệu.")
+                        except Exception:
+                            pass
 
-                master_id = f"MASTER_{uuid.uuid4().hex[:6].upper()}"
-                rel_path = f"uploads/all_in_one/{storage_filename}"
+                    sub_titles = {
+                        "market_research": "Phân Hệ 1: Nghiên cứu Quy mô & Đặc điểm Thị trường 4 Địa bàn",
+                        "competitor_data": "Phân Hệ 2: Hồ sơ Phân tích Đối thủ & Thị phần Bản địa",
+                        "customer_feedback": "Phân Hệ 3: Khảo sát Nhu cầu Khách hàng & Điểm đau Vận hành Kho",
+                        "product_catalog": "Phân Hệ 4: Danh mục Tính năng & Thông số Kỹ thuật Hưng Phát WMS",
+                        "deployment_capacity": "Phân Hệ 5: Báo cáo Năng lực Triển khai, Kỹ thuật & Trạm SLA 10km",
+                        "evaluation_criteria": "Phân Hệ 6: Bộ Tiêu chí, Trọng số & Quy tắc Đánh giá MCDA"
+                    }
 
-                for grp in DATA_GROUPS:
-                    grp_id = grp["id"]
-                    sub_title = sub_titles.get(grp_id, grp["title"])
+                    master_id = f"MASTER_{uuid.uuid4().hex[:6].upper()}"
+                    rel_path = f"uploads/all_in_one/{storage_filename}"
+
+                    for grp in DATA_GROUPS:
+                        grp_id = grp["id"]
+                        sub_title = sub_titles.get(grp_id, grp["title"])
+                        doc_entry = {
+                            "id": f"DOC_{uuid.uuid4().hex[:8].upper()}",
+                            "doc_name": f"{doc_name} [{sub_title}]",
+                            "category": grp_id,
+                            "source": source.strip(),
+                            "collected_date": collected_date.strip(),
+                            "location": location.strip(),
+                            "file_name": raw_filename,
+                            "storage_filename": storage_filename,
+                            "storage_path": rel_path,
+                            "file_size": actual_file_size,
+                            "file_ext": ext_clean.upper() if ext_clean else "XLSX",
+                            "received_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "is_all_in_one": True,
+                            "master_id": master_id,
+                            "auto_extracted": True
+                        }
+                        docs_inventory.insert(0, doc_entry)
+                        created_docs.append(doc_entry)
+
+                    log_data_audit(
+                        action="ALL_IN_ONE_EXTRACT",
+                        message=f"⚡ TIẾP NHẬN BÁO CÁO ALL-IN-ONE: Tự động bóc tách file tổng hợp '{raw_filename}' thành đủ 6 nhóm dữ liệu nghiệp vụ chuẩn.",
+                        details={
+                            "master_id": master_id,
+                            "file_name": raw_filename,
+                            "storage_path": rel_path,
+                            "extracted_groups_count": len(DATA_GROUPS),
+                            "groups": [g["id"] for g in DATA_GROUPS]
+                        }
+                    )
+                else:
+                    # Nạp tài liệu đơn lẻ vào 1 nhóm cụ thể
+                    category = raw_category if raw_category in valid_group_ids else "market_research"
+                    storage_filename = f"{timestamp_str}_{safe_name}"
+                    target_dir = os.path.join(UPLOADS_DIR, category)
+                    try:
+                        os.makedirs(target_dir, exist_ok=True)
+                    except Exception:
+                        target_dir = os.path.join("/tmp", "uploads", category)
+                        os.makedirs(target_dir, exist_ok=True)
+                    target_filepath = os.path.join(target_dir, storage_filename)
+
+                    try:
+                        file_bytes = base64.b64decode(file_base64)
+                        with open(target_filepath, "wb") as f:
+                            f.write(file_bytes)
+                        actual_file_size = len(file_bytes)
+                    except Exception:
+                        actual_file_size = item.get("file_size", 0)
+                        try:
+                            with open(target_filepath, "w", encoding="utf-8") as f:
+                                f.write(f"Tài liệu tiếp nhận: {doc_name}\nNguồn: {source}\nNgày: {collected_date}")
+                        except Exception:
+                            pass
+
                     doc_entry = {
                         "id": f"DOC_{uuid.uuid4().hex[:8].upper()}",
-                        "doc_name": f"{doc_name} [{sub_title}]",
-                        "category": grp_id,
+                        "doc_name": doc_name.strip(),
+                        "category": category,
                         "source": source.strip(),
                         "collected_date": collected_date.strip(),
                         "location": location.strip(),
                         "file_name": raw_filename,
                         "storage_filename": storage_filename,
-                        "storage_path": rel_path,
+                        "storage_path": f"uploads/{category}/{storage_filename}",
                         "file_size": actual_file_size,
-                        "file_ext": ext_clean.upper() if ext_clean else "XLSX",
-                        "received_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "is_all_in_one": True,
-                        "master_id": master_id,
-                        "auto_extracted": True
+                        "file_ext": ext_clean.upper() if ext_clean else "FILE",
+                        "received_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     }
+
                     docs_inventory.insert(0, doc_entry)
                     created_docs.append(doc_entry)
 
-                log_data_audit(
-                    action="ALL_IN_ONE_EXTRACT",
-                    message=f"⚡ TIẾP NHẬN BÁO CÁO ALL-IN-ONE: Tự động bóc tách file tổng hợp '{raw_filename}' thành đủ 6 nhóm dữ liệu nghiệp vụ chuẩn.",
-                    details={
-                        "master_id": master_id,
-                        "file_name": raw_filename,
-                        "storage_path": rel_path,
-                        "extracted_groups_count": len(DATA_GROUPS),
-                        "groups": [g["id"] for g in DATA_GROUPS]
-                    }
-                )
-            else:
-                # Nạp tài liệu đơn lẻ vào 1 nhóm cụ thể
-                category = raw_category if raw_category in valid_group_ids else "market_research"
-                storage_filename = f"{timestamp_str}_{safe_name}"
-                target_dir = os.path.join(UPLOADS_DIR, category)
-                try:
-                    os.makedirs(target_dir, exist_ok=True)
-                except Exception:
-                    target_dir = os.path.join("/tmp", "uploads", category)
-                    os.makedirs(target_dir, exist_ok=True)
-                target_filepath = os.path.join(target_dir, storage_filename)
+                    log_data_audit(
+                        action="UPLOAD_DOCUMENT",
+                        message=f"Đã tiếp nhận và lưu file thực tế: '{doc_entry['doc_name']}' ({raw_filename}) vào danh mục [{category.upper()}].",
+                        details={
+                            "doc_id": doc_entry["id"],
+                            "file_path": doc_entry["storage_path"],
+                            "file_size": doc_entry["file_size"],
+                            "location": doc_entry["location"]
+                        }
+                    )
 
-                try:
-                    file_bytes = base64.b64decode(file_base64)
-                    with open(target_filepath, "wb") as f:
-                        f.write(file_bytes)
-                    actual_file_size = len(file_bytes)
-                except Exception:
-                    actual_file_size = item.get("file_size", 0)
-                    try:
-                        with open(target_filepath, "w", encoding="utf-8") as f:
-                            f.write(f"Tài liệu tiếp nhận: {doc_name}\nNguồn: {source}\nNgày: {collected_date}")
-                    except Exception:
-                        pass
+            save_json(INVENTORY_FILE, docs_inventory)
 
-                doc_entry = {
-                    "id": f"DOC_{uuid.uuid4().hex[:8].upper()}",
-                    "doc_name": doc_name.strip(),
-                    "category": category,
-                    "source": source.strip(),
-                    "collected_date": collected_date.strip(),
-                    "location": location.strip(),
-                    "file_name": raw_filename,
-                    "storage_filename": storage_filename,
-                    "storage_path": f"uploads/{category}/{storage_filename}",
-                    "file_size": actual_file_size,
-                    "file_ext": ext_clean.upper() if ext_clean else "FILE",
-                    "received_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                }
-
-                docs_inventory.insert(0, doc_entry)
-                created_docs.append(doc_entry)
-
-                log_data_audit(
-                    action="UPLOAD_DOCUMENT",
-                    message=f"Đã tiếp nhận và lưu file thực tế: '{doc_entry['doc_name']}' ({raw_filename}) vào danh mục [{category.upper()}].",
-                    details={
-                        "doc_id": doc_entry["id"],
-                        "file_path": doc_entry["storage_path"],
-                        "file_size": doc_entry["file_size"],
-                        "location": doc_entry["location"]
-                    }
-                )
-
-        save_json(INVENTORY_FILE, docs_inventory)
-
-        self._send_json({
-            "success": True,
-            "created_count": len(created_docs),
-            "created_docs": created_docs,
-            "total_inventory": len(docs_inventory)
-        })
-    except Exception as e:
-        self._send_json({
-            "success": False,
-            "error": f"Lỗi xử lý tiếp nhận file: {str(e)}"
-        }, status=500)
+            self._send_json({
+                "success": True,
+                "created_count": len(created_docs),
+                "created_docs": created_docs,
+                "total_inventory": len(docs_inventory)
+            })
+        except Exception as e:
+            self._send_json({
+                "success": False,
+                "error": f"Lỗi xử lý tiếp nhận file: {str(e)}"
+            }, status=500)
 
     def _handle_delete_document(self):
         content_length = int(self.headers.get('Content-Length', 0))
@@ -1010,6 +1014,13 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
 
     def _handle_confirm_input(self):
         try:
+            try:
+                content_length = int(self.headers.get('Content-Length', 0) or 0)
+                if content_length > 0:
+                    self.rfile.read(content_length)
+            except Exception:
+                pass
+
             docs = load_json(INVENTORY_FILE, default=[])
 
             group_counts = {g["id"]: 0 for g in DATA_GROUPS}
@@ -2724,6 +2735,10 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                 else:
                     self.send_error(400, f"File {dataset_path} does not exist")
                     return
+
+        global HungPhatMasterAgent
+        if HungPhatMasterAgent is None:
+            from src.agent_coordinator import HungPhatMasterAgent
 
         agent = HungPhatMasterAgent(session_name=f"WEB_SESSION_{tag.upper()}")
         result = agent.run_pipeline(

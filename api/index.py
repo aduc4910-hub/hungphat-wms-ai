@@ -23,6 +23,13 @@ except Exception as startup_err:
     from http.server import BaseHTTPRequestHandler
     class FallbackHandler(BaseHTTPRequestHandler):
         def _send_fail_json(self):
+            try:
+                cl = int(self.headers.get('Content-Length', 0) or 0)
+                if cl > 0:
+                    self.rfile.read(cl)
+            except Exception:
+                pass
+
             body = json.dumps({
                 "success": False,
                 "error": "SERVER_STARTUP_ERROR",
