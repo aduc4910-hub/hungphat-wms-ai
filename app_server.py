@@ -492,13 +492,17 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
         self._send_json({"logs": logs})
 
     def _handle_upload_file(self):
-        content_length = int(self.headers.get('Content-Length', 0))
-        post_data = self.rfile.read(content_length).decode('utf-8')
         try:
-            req = json.loads(post_data)
-        except Exception as e:
-            self.send_error(400, f"Dữ liệu JSON không hợp lệ: {str(e)}")
-            return
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length > 0:
+                post_data = self.rfile.read(content_length).decode('utf-8')
+            else:
+                post_data = "{}"
+            try:
+                req = json.loads(post_data)
+            except Exception as e:
+                self.send_error(400, f"Dữ liệu JSON không hợp lệ: {str(e)}")
+                return
 
         items = req.get("documents")
         if not items:
@@ -557,7 +561,7 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                 }
 
                 master_id = f"MASTER_{uuid.uuid4().hex[:6].upper()}"
-                rel_path = os.path.relpath(target_filepath, BASE_DIR).replace("\\", "/")
+                rel_path = f"uploads/all_in_one/{storage_filename}"
 
                 for grp in DATA_GROUPS:
                     grp_id = grp["id"]
@@ -627,7 +631,7 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
                     "location": location.strip(),
                     "file_name": raw_filename,
                     "storage_filename": storage_filename,
-                    "storage_path": os.path.relpath(target_filepath, BASE_DIR).replace("\\", "/"),
+                    "storage_path": f"uploads/{category}/{storage_filename}",
                     "file_size": actual_file_size,
                     "file_ext": ext_clean.upper() if ext_clean else "FILE",
                     "received_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -655,6 +659,11 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             "created_docs": created_docs,
             "total_inventory": len(docs_inventory)
         })
+    except Exception as e:
+        self._send_json({
+            "success": False,
+            "error": f"Lỗi xử lý tiếp nhận file: {str(e)}"
+        }, status=500)
 
     def _handle_delete_document(self):
         content_length = int(self.headers.get('Content-Length', 0))
@@ -955,10 +964,18 @@ class AgentWebHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, "Không tìm thấy tài liệu trong hệ thống")
             return
 
-        storage_rel = target_doc.get("storage_path")
-        full_path = os.path.join(BASE_DIR, storage_rel.replace("/", os.sep))
+        storage_rel = target_doc.get("storage_path", "")
+        clean_rel = storage_rel.replace("uploads/", "").replace("/", os.sep)
+        possible_paths = [
+            os.path.join(UPLOADS_DIR, clean_rel),
+            os.path.join(STORAGE_DIR, storage_rel.replace("/", os.sep)),
+            os.path.join(BASE_DIR, storage_rel.replace("/", os.sep)),
+            os.path.join("/tmp", storage_rel.replace("/", os.sep)),
+            os.path.join("/tmp/uploads", clean_rel)
+        ]
+        full_path = next((p for p in possible_paths if os.path.exists(p)), None)
 
-        if not os.path.exists(full_path):
+        if not full_path:
             self.send_error(404, "Tệp tin không tồn tại trên ổ đĩa máy chủ")
             return
 

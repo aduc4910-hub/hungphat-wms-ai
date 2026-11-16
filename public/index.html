@@ -6373,7 +6373,7 @@
         try {
           data = JSON.parse(text);
         } catch (jsonErr) {
-          throw new Error('Máy chủ phản hồi không đúng chuẩn JSON (Mã HTTP: ' + res.status + ').');
+          throw new Error('Máy chủ phản hồi không đúng chuẩn JSON (Mã HTTP ' + res.status + '): ' + (text ? text.substring(0, 150) : 'Rỗng'));
         }
 
         if (data.success) {
